@@ -16,11 +16,11 @@ protoc --go_out=. --go_opt=paths=source_relative \
 
 ```go
 struct Box{
-	length float
+	length  float
 	breadth float
-	height float
-	id int32
-    weight float
+	height  float
+	id      int32
+    weight  float
 }
 
 struct Position{
@@ -29,14 +29,14 @@ struct Position{
 	z float
 }
 
-struct BinPacking Request{
-    Bin Box
-    Items Box[]
+struct BinPackingRequest{
+    Bin     Box
+    Items   Box[]
 }
 
-struct BinPakcingResponse{
-	Items Box[]
-	Positions Position[]
+struct BinPackingResponse{
+    Items       Box[]
+    Positions   Position[]
 }
 ```
 
@@ -54,7 +54,7 @@ struct Package{
     wieght	float
 }
 
-struct Vechicle{
+struct Vehicle{
     weight		float
     volume		float
     vehicle_id	int32
@@ -62,17 +62,17 @@ struct Vechicle{
 struct CVRPRequest {
     vechicle_count	int32
     package_count	int32
-    package			Package[]
-    vehicle			Vehicle[]
+    package         Package[]
+    vehicle         Vehicle[]
 }
 
 struct Path{
-    vehicle_id	int32
-    box 		int32[]
+    vehicle_id  int32
+    box         int32[]
 }
 
 struct CVRPResponse{
-    vehicle_count	int32
-        paths			Path[]
+    vehicle_count   int32
+    paths           Path[]
 }
 ```
