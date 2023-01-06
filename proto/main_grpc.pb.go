@@ -36,7 +36,7 @@ func NewTransportClient(cc grpc.ClientConnInterface) TransportClient {
 
 func (c *transportClient) RunBinPacking(ctx context.Context, in *BinPackingRequest, opts ...grpc.CallOption) (*BinPackingResponse, error) {
 	out := new(BinPackingResponse)
-	err := c.cc.Invoke(ctx, "/main.Transport/RunBinPacking", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.Transport/RunBinPacking", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *transportClient) RunBinPacking(ctx context.Context, in *BinPackingReque
 
 func (c *transportClient) RunCVRP(ctx context.Context, in *CVRPRequest, opts ...grpc.CallOption) (*CVRPResponse, error) {
 	out := new(CVRPResponse)
-	err := c.cc.Invoke(ctx, "/main.Transport/RunCVRP", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.Transport/RunCVRP", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _Transport_RunBinPacking_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.Transport/RunBinPacking",
+		FullMethod: "/proto.Transport/RunBinPacking",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TransportServer).RunBinPacking(ctx, req.(*BinPackingRequest))
@@ -112,7 +112,7 @@ func _Transport_RunCVRP_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.Transport/RunCVRP",
+		FullMethod: "/proto.Transport/RunCVRP",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(TransportServer).RunCVRP(ctx, req.(*CVRPRequest))
@@ -124,7 +124,7 @@ func _Transport_RunCVRP_Handler(srv interface{}, ctx context.Context, dec func(i
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Transport_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "main.Transport",
+	ServiceName: "proto.Transport",
 	HandlerType: (*TransportServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/Grow-Simplee-KGP/Thoth/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/examples/data"
@@ -38,6 +39,12 @@ func main() {
 		}
 		opts = []grpc.ServerOption{grpc.Creds(creds)}
 	}
+
+	binpack := binpack{}
+
 	grpcServer := grpc.NewServer(opts...)
-	grpcServer.Serve(lis)
+	proto.RegisterTransportServer(grpcServer, &binpack)
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %s", err)
+	}
 }
