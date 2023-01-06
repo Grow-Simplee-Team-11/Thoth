@@ -10,6 +10,14 @@ protoc --go_out=. --go_opt=paths=source_relative \
     proto/*.proto
 ```
 
+## Running server
+
+```
+go get .
+cd server
+go run ./server.go
+```
+
 ## Current Structs of proto file:
 
 #### 3D Bin Packing
