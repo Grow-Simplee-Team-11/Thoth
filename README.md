@@ -18,6 +18,13 @@ cd server
 go run ./server.go
 ```
 
+### Running Client
+
+```
+From root directory of project
+go run .
+```
+
 ## Current Structs of proto file:
 
 #### 3D Bin Packing
