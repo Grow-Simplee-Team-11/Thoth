@@ -4,10 +4,10 @@ package dynamic;
 
 option go_package = "github.com/Grow-Simplee-KGP/Thoth/proto/dynamic";    
 
-message Location{
-    float latitude=1;
-    float longitude=2;
-}
+// message Location{
+//     float latitude=1;
+//     float longitude=2;
+// }
 
 // Dynamic Routing Request
 // {
@@ -33,7 +33,7 @@ message ObjectPaths{
 }
 
 message DynamicRequest{
-    Location pickup = 1;
+    int32 pickup = 1;
     repeated int32 object_id = 2;
     repeated ObjectPaths paths=3;
 }
