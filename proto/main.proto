@@ -75,11 +75,13 @@ message DynamicRequest{
     repeated SingleDynamicPath response=1;
 }
 
-service Transport{
-    
-    rpc RunBinPacking(BinPackingRequest) returns (BinPackingResponse){}
+service BinPacking{
+    rpc RunBinPacking(BinPackingRequest) returns (BinPackingResponse){}    
+}
 
+service CVRP{
     rpc RunCVRP(CVRPRequest) returns (CVRPResponse){}
-
+}
+service DynamicRouting{
     rpc RunDynamix(DynamicRequest) returns (SingleDynamicPath){}
 }
