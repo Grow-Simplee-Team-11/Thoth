@@ -1,0 +1,48 @@
+syntax="proto3";
+
+package dynamic;
+
+option go_package = "github.com/Grow-Simplee-KGP/Thoth/proto/dynamic";    
+
+message Location{
+    float latitude=1;
+    float longitude=2;
+}
+
+// Dynamic Routing Request
+// {
+//      path: the path which needs to be added
+//      destinations: an array of individual destination locations sorted in ascending order
+//                  destination: {
+//                                   vehicle_id
+//                                }
+// }
+
+
+//Dynamic Routing Response
+//{
+//  vehicle_id
+//  paths: {
+//              coordinates
+//          }
+//}
+
+message ObjectPaths{
+    int32 vehicle=1;
+    repeated int32 objects=2;
+}
+
+message DynamicRequest{
+    Location pickup = 1;
+    repeated int32 object_id = 2;
+    repeated ObjectPaths paths=3;
+}
+
+message DynamicResponse{
+    int32 vehicle=1;
+    repeated int32 objects=2;
+}
+
+service DynamicRouting{
+    rpc RunDynamic(DynamicRequest) returns (DynamicResponse){}
+}
