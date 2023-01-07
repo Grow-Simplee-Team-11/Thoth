@@ -4,7 +4,7 @@ package proto;
 
 option go_package = "github.com/Grow-Simplee-KGP/Thoth/proto";    
 
-message Bin{
+message Box{
     int32 id=1;
     float length=2;
     float breadth=3;
@@ -19,32 +19,30 @@ message Position{
 }
 
 message BinPackingRequest{
-    Bin bin=1;
-    repeated Bin items=2;
+    Box bin=1;
+    repeated Box items=2;
 }
 
 message BinPackingResponse{
-    repeated Bin items=1;
+    repeated Box items=1;
     repeated Position positions=2;
 }
 
-message Package{
-    int32 id=1;
-    float length=2;
-    float breadth=3;
-    float height=4;
-    float weight=5;
-    Location location=6;
-}
 
 message Location{
     float latitude=1;
     float longitude=2;
 }
 
-message Vehicle{    
+message Package{
     int32 id=1;
-    Bin bag=2;
+    Box box=2;
+    Location location=3;
+}
+
+message Vehicle{
+    int32 id=1;
+    Box bag=2;
     float volume=3;
     float free_vol=4;
 }
@@ -61,18 +59,13 @@ message Path{
     repeated int32 boxes=2;
 }
 
+message DynamicRouting{
+    repeated 
+}
+
 message CVRPResponse{
     int32 vehicle_count=1;
     repeated Path path=2;
-}
-
-message SingleDynamicPath{
-    repeated Package packages=1;
-    Vehicle vehicle=2; 
-}
-
-message DynamicRequest{
-    repeated SingleDynamicPath response=1;
 }
 
 service Transport{
@@ -80,6 +73,4 @@ service Transport{
     rpc RunBinPacking(BinPackingRequest) returns (BinPackingResponse){}
 
     rpc RunCVRP(CVRPRequest) returns (CVRPResponse){}
-
-    rpc RunDynamix(DynamicRequest) returns (SingleDynamicPath){}
 }

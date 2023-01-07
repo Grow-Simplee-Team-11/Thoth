@@ -21,7 +21,7 @@ func Callbinpacking(client proto.TransportClient) {
 
 	data, err := client.RunBinPacking(ctx, value)
 	if err != nil {
-		log.Fatalf("Call CVRP failed with %s", err)
+		log.Fatalf("Call Binpack failed with %s", err)
 	}
 
 	log.Print(data)
