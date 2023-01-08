@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"time"
 
 	"github.com/go-redis/redis/v9"
 )
@@ -15,7 +14,7 @@ func createRedisDatabase() (Database, error) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
-		DB:       1,
+		DB:       0,
 	})
 	_, err := client.Ping(context.Background()).Result()
 	if err != nil {
@@ -24,8 +23,8 @@ func createRedisDatabase() (Database, error) {
 	return &redisDatabase{client: client}, nil
 }
 
-func (r *redisDatabase) Set(key string, value string) (string, error) {
-	_, err := r.client.Set(context.Background(), key, value, time.Hour).Result()
+func (r *redisDatabase) Set(key string, value []byte) (string, error) {
+	_, err := r.client.Set(context.Background(), key, value, 0).Result()
 	if err != nil {
 		return generateError("set", err)
 	}
@@ -41,7 +40,7 @@ func (r *redisDatabase) GeoAdd(key string, latitude float64, longitude float64) 
 }
 
 func (r *redisDatabase) GeoSearch(key string, latitude float64, longitude float64) ([]redis.GeoLocation, error) {
-	response, err := r.client.GeoSearchLocation(context.Background(), "point1", &redis.GeoSearchLocationQuery{GeoSearchQuery: redis.GeoSearchQuery{Latitude: latitude, Longitude: longitude, Radius: 50, Sort: "ASC"}, WithCoord: true}).Result()
+	response, err := r.client.GeoSearchLocation(context.Background(), key, &redis.GeoSearchLocationQuery{GeoSearchQuery: redis.GeoSearchQuery{Latitude: latitude, Longitude: longitude, Radius: 50, Sort: "ASC"}, WithCoord: true}).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -62,6 +61,14 @@ func (r *redisDatabase) Delete(key string) (string, error) {
 		return generateError("delete", err)
 	}
 	return key, nil
+}
+
+func (r *redisDatabase) Inc(key string) (int32, error) {
+	id, err := r.client.Incr(context.Background(), key).Result()
+	if err != nil {
+		return 0, err
+	}
+	return int32(id), err
 }
 
 func generateError(operation string, err error) (string, error) {

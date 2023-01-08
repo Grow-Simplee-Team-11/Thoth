@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 	"time"
 
 	"github.com/Grow-Simplee-KGP/Thoth/client"
+	"github.com/Grow-Simplee-KGP/Thoth/database"
+	"github.com/Grow-Simplee-KGP/Thoth/proto/dynamic"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -21,19 +24,34 @@ func DynamicRegister(router *gin.RouterGroup) {
 	router.POST("/pickup", AddPickupPoint)
 }
 
+func savePickup(pickup *dynamic.Object) {
+	pickup.Id, _ = database.Db.Inc("pickup:id")
+	data, err := json.Marshal(pickup)
+	if err != nil {
+		panic(err)
+	}
+	database.Db.Set(fmt.Sprintf("pickup:%d", pickup.Id), data)
+}
+
 func AddPickupPoint(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c, time.Second)
+	ctx, cancel := context.WithTimeout(c, 10*time.Second)
 	defer cancel()
 
-	var pickup client.Pickup
+	var pickup dynamic.Object
 	err := c.BindJSON(&pickup)
 	if err != nil {
 		response(c, nil, err)
 		return
 	}
 
-	value, err := dynamicRoutingClient.RunDynamic(&ctx, pickup)
-	fmt.Println(value)
+	//Save Pickup location and set pickup point
+	savePickup(&pickup)
+
+	newRoute, err := dynamicRoutingClient.RunDynamic(&ctx, &pickup)
+
+	//save new route
+	fmt.Println(newRoute)
+
 	response(c, nil, err)
 }
 
@@ -50,6 +68,7 @@ func response(c *gin.Context, data interface{}, err error) {
 
 func main() {
 	log.Println("Thoth running")
+	database.SetupDb()
 
 	r := gin.Default()
 	r.Use(cors.Default())
@@ -58,6 +77,7 @@ func main() {
 	DynamicRegister(api.Group("/dynamic"))
 
 	r.Run()
+
 	// client.StartClient()
 	// db, err := database.Factory("redis")
 	// if err != nil {
