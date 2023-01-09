@@ -47,10 +47,7 @@ func AddPickupPoint(c *gin.Context) {
 	//Save Pickup location and set pickup point
 	savePickup(&pickup)
 
-	newRoute, err := dynamicRoutingClient.RunDynamic(&ctx, &pickup)
-
-	//save new route
-	fmt.Println(newRoute)
+	_, err = dynamicRoutingClient.RunDynamic(&ctx, &pickup)
 
 	response(c, nil, err)
 }

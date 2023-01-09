@@ -40,7 +40,7 @@ func (r *redisDatabase) GeoAdd(key string, latitude float64, longitude float64) 
 }
 
 func (r *redisDatabase) GeoSearch(key string, latitude float64, longitude float64) ([]redis.GeoLocation, error) {
-	response, err := r.client.GeoSearchLocation(context.Background(), key, &redis.GeoSearchLocationQuery{GeoSearchQuery: redis.GeoSearchQuery{Latitude: latitude, Longitude: longitude, Radius: 50, Sort: "ASC"}, WithCoord: true}).Result()
+	response, err := r.client.GeoSearchLocation(context.Background(), key, &redis.GeoSearchLocationQuery{GeoSearchQuery: redis.GeoSearchQuery{Latitude: latitude, Longitude: longitude, Radius: 5000, Sort: "ASC"}, WithCoord: true}).Result()
 	if err != nil {
 		return nil, err
 	}
