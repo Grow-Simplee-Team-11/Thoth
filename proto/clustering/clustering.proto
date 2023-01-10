@@ -33,8 +33,10 @@ message Cluster{
 }
 
 message ClusteringRequest{
-    Box bin=1;
-    repeated Box items=2;
+    Box bin=1; // Rider's bag
+    repeated Box items=2; // Objects
+    Location Hub=3;
+    
 }
 
 message ClusteringResponse{
