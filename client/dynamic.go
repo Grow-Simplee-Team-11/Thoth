@@ -9,7 +9,6 @@ import (
 
 	"github.com/Grow-Simplee-KGP/Thoth/database"
 	"github.com/Grow-Simplee-KGP/Thoth/proto/dynamic"
-	"github.com/go-redis/redis/v9"
 	"google.golang.org/grpc"
 )
 
@@ -30,8 +29,6 @@ var (
 
 type DynamicRoutingClient struct {
 }
-
-type Location []redis.GeoLocation
 
 func prepareDynamicGrpcClient(c *context.Context) error {
 	conn, err := grpc.DialContext(*c, dynamicGrpcService, []grpc.DialOption{
@@ -156,7 +153,6 @@ func saveRoute(response *dynamic.DynamicResponse) {
 	rider.Objects = response.ObjectIds
 	saveRider(rider)
 }
-
 
 func (dc *DynamicRoutingClient) RunDynamic(c *context.Context, pickup *dynamic.Object) (string, error) {
 	if err := prepareDynamicGrpcClient(c); err != nil {
