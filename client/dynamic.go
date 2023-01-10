@@ -124,7 +124,7 @@ func fetchPaths(locations *[]int32) []*dynamic.ObjectPaths {
 	return paths
 }
 
-func fetchHub() *dynamic.Location {
+func FetchHub() *dynamic.Location {
 	val, err := database.Db.Get("hub")
 	if err != nil {
 		panic(err)
@@ -161,7 +161,7 @@ func (dc *DynamicRoutingClient) RunDynamic(c *context.Context, pickup *dynamic.O
 
 	// fetch nearby riders with their paths
 	objects := fetchLocations(pickup)
-	hub := fetchHub()
+	hub := FetchHub()
 	paths := fetchPaths(&objects)
 	//fetch paths of each rider
 	// paths := fetchPaths(locations)
