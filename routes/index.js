@@ -10,10 +10,9 @@
 
 // router.get("/hub", controllers.getHub);
 
-const express = require("express");
-const riderRoute = require("./rider.route");
-
-const config = require("../config/config");
+import express from "express";
+import riderRoute from "./rider.route.js";
+import config from "../config/config.js";
 
 const router = express.Router();
 
@@ -43,4 +42,4 @@ if (config.env === "development") {
     });
 }
 
-module.exports = router; // module.exports = router;
+export default router; // module.exports = router;

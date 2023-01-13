@@ -1,12 +1,11 @@
-const express = require("express");
+import express from "express";
+import controllers from "../controllers/rider.controller.js";
 
 const router = express.Router();
-const controllers = require("../controllers/rider.controller");
-
 router.get("/location", controllers.getRider);
 
 router.post("/location", controllers.setRider);
 
 router.patch("/location", controllers.updateRider);
 
-module.exports = router;
+export default router;

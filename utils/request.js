@@ -1,4 +1,4 @@
-exports.createDynamicRequest = (pickup, hub) => {
+const createDynamicRequest = (pickup, hub) => {
     return {
         pickup: {
             id: pickup.id,
@@ -13,3 +13,5 @@ exports.createDynamicRequest = (pickup, hub) => {
         hub: {x: hub.x, y: hub.y},
     };
 };
+
+export   default createDynamicRequest;

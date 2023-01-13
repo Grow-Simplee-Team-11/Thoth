@@ -5,6 +5,7 @@
     "repository": "https://github.com/Grow-Simplee-KGP/Thoth.git",
     "author": "rajivharlalka <rajivharlalka009@gmail.com>",
     "license": "MIT",
+    "type": "module",
     "dependencies": {
         "@grpc/grpc-js": "^1.8.2",
         "cors": "^2.8.5",

@@ -1,10 +1,11 @@
-const dotenv = require("dotenv");
-const path = require("path");
+import path from "path";
+const __dirname = path.resolve();
 
-dotenv.config({path: path.join(__dirname, "../.env")});
+import dotenv from "dotenv";
+dotenv.config({path: path.join(__dirname, "/.env")});
 
 const envVars = process.env;
-module.exports = {
+export default {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
     mongoose: {

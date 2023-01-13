@@ -1,7 +1,6 @@
-const redis = require("../database/redis");
-const request = require("../utils/request");
-
-const dynamicClient = require("../client/dynamic");
+import redis from "../database/redis.js";
+import request from "../utils/request.js";
+import dynamicClient from "../client/dynamic";
 
 const addPickup = async (req, res) => {
     try {
@@ -79,4 +78,4 @@ const getHub = async (req, res) => {
 
 function getPaths(objects) {}
 
-module.exports = {getHub, addHub, addPickup, updateRider, setRider, getRider};
+export default {getHub, addHub, addPickup, updateRider, setRider, getRider};

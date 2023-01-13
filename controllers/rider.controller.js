@@ -1,8 +1,8 @@
-const redis = require("../database/redis");
-const request = require("../utils/request");
-const dynamicClient = require("../client/dynamic");
+import redis from "../database/redis.js";
+import request from "../utils/request.js";
+// import dynamicClient from "../client/dynamic.js";
 
-const catchAsync = require("../utils/catchAsync");
+import catchAsync from "../utils/catchAsync.js";
 
 const updateRider = catchAsync(async (req, res) => {
     const {id, location} = req.body;
@@ -22,4 +22,4 @@ const getRider = catchAsync(async (req, res) => {
     res.status(200).json({rider});
 });
 
-module.exports = {getRider, setRider, updateRider};
+export default {getRider, setRider, updateRider};

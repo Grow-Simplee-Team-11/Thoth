@@ -1,4 +1,4 @@
-const redis = require("redis");
+import redis from "redis";
 const client = redis.createClient();
 
 (async () => {
@@ -34,40 +34,52 @@ function setStringData(key, value) {
     return client.set(key, JSON.stringify(value));
 }
 
-exports.getPickupId = () => {
+const getPickupId = () => {
     return getStringData("pickup:id");
 };
 
-exports.setPickupData = async value => {
+const setPickupData = async value => {
     const id = await incId("pickup:id");
     return setHashData("pickup:data", id, {...value, id});
 };
 
-exports.setHub = value => {
+const setHub = value => {
     return setStringData("hub:data", value);
 };
 
-exports.getHub = () => {
+const getHub = () => {
     return getStringData("hub:data");
 };
 
-exports.addGeoData = (coordinates, id) => {
+const addGeoData = (coordinates, id) => {
     return setGeoData("package:coordinate", coordinates.x, coordinates.y, id);
 };
 
-exports.getGeoLocations = coordinates => {
+const getGeoLocations = coordinates => {
     return geosearch("package:coordinate", coordinates.x, coordinates.y);
 };
 
-exports.setRiderData = async value => {
+const setRiderData = async value => {
     const id = await incId("rider:id");
     return setHashData("rider:data", id, {...value, id});
 };
 
-exports.updateRiderData = (id, value) => {
+const updateRiderData = (id, value) => {
     return setHashData("rider:data", id, value);
 };
 
-exports.getRiderData = id => {
+const getRiderData = id => {
     return getHashData("rider:data", id);
+};
+
+export default {
+    getPickupId,
+    setPickupData,
+    setHub,
+    getHub,
+    addGeoData,
+    getGeoLocations,
+    setRiderData,
+    updateRiderData,
+    getRiderData,
 };

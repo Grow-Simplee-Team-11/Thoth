@@ -1,13 +1,13 @@
-const express = require("express");
-const helmet = require("helmet");
-const xss = require("xss-clean");
-const cors = require("cors");
-const httpStatus = require("http-status");
-const config = require("./config/config.js");
-const morgan = require("./config/morgan");
-const routes = require("./routes");
-const {errorConverter, errorHandler} = require("./middlewares/error");
-const ApiError = require("./utils/ApiError");
+import express from "express";
+import helmet from "helmet";
+import xss from "xss-clean";
+import cors from "cors";
+import httpStatus from "http-status";
+import config from "./config/config.js";
+import morgan from "./config/morgan.js";
+import routes from "./routes/index.js";
+import {errorConverter, errorHandler} from "./middlewares/error.js";
+import ApiError from "./utils/ApiError.js";
 
 const app = express();
 
@@ -46,4 +46,4 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-module.exports = app;
+export default app;
