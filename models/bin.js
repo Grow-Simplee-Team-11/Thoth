@@ -1,11 +1,27 @@
-import mongoose from "mongoose";
+import mongoose, {Mongoose} from "mongoose";
 const Schema = mongoose.Schema;
 
 const binSchema = new Schema(
     {
-        name: {type: String, required: true},
-        phone: {type: String, required: true},
-        paths: [Number],
+        dimensions: {
+            length: {type: String, required: true},
+            breadth: {type: String, required: true},
+            height: {type: String, required: true},
+            weight: {type: String, required: true},
+        },
+        rider_id: {type: Schema.Types.ObjectId},
+        packages: [
+            {
+                package_id: {type: Schema.Types.ObjectId},
+                length: {type: String, required: true},
+                breadth: {type: String, required: true},
+                height: {type: String, required: true},
+                x: {type: String, required: true},
+                y: {type: String, required: true},
+                z: {type: String, required: true},
+                weight: {type: String, required: true},
+            },
+        ],
     },
     {timestamps: true}
 );

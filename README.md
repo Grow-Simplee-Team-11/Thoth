@@ -6,7 +6,7 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 ### Mobile End
 
--   [] View their path
+-   [] View their path - duplicate
 -   [] Bin Packing
 -   [] get list of orders
 -   [] update riders location
@@ -17,12 +17,11 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 -   [x] Add a new Rider
 -   [x] Add a Delivery item
+-   [] Search feature using package id, rider id, which includes barcode
+-   [] Search packages based on date, delivery status
 -   [] add a new pickup point and run dynamic algo - also update path the rider
 -   [] A route that starts that routing process.
--   [] Search feature using package id, rider id, which includes barcode
--   [] get details of rider including location
 -   [] store image of defective items when adding a new pickup point
--   [] Search packages based on date, rider, delivery status
 <!--
 To generate the .pb.go file for go using protoc from the root Directory:
 

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const packageSchema = new Schema(
     {
         image_url: {type: String},
-        item_id: {type: String, required: true},
+        item_id: {type: Schema.Types.ObjectId, required: true},
         deliver_to:{name:{type:String,required:true},phone_number:{type:String,required:true}},
         status: {type: String, enum: ['CREATED', 'DELIVERED', 'PICKED', 'FAKE_ATTEMPT', 'DAMAGED'], default: "CREATED"},
         coordinates: {
