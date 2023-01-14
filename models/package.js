@@ -4,14 +4,9 @@ const Schema = mongoose.Schema;
 const packageSchema = new Schema(
     {
         image_url: {type: String, required: true},
-        dimensions: {
-            height: {type: Number, required: true},
-            length: {type: Number, required: true},
-            breadth: {type: Number, required: true},
-        },
-        sku_id: {type: String, require: true},
+        item_id: {type: String, required: true},
         deliver_to:{name:{type:String,required:true},number:{type:String,required:true}},
-        delivery_status: {type: String, default: "CREATED"},
+        status: {type: String, enum: ['CREATED', 'DELIVERED', 'PICKED', 'FAKE_ATTEMPT', 'DAMAGED'], default: "CREATED"},
         coordinates: {
             lat: {type: Number, required: true},
             long: {type: Number, required: true},
@@ -19,6 +14,7 @@ const packageSchema = new Schema(
         },
         rider_assigned: {type: String},
         delivered_time: {type: Date, default: Date.now},
+        type: {type: String, enum: ['DELIVERY', 'PICKUP']},
     },
     {timestamps: true}
 );
