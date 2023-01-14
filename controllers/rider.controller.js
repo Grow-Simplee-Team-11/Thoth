@@ -1,10 +1,16 @@
 import redis from "../database/redis.js";
-import request from "../utils/request.js";
-// import dynamicClient from "../client/dynamic.js";
-
 import catchAsync from "../utils/catchAsync.js";
+import Rider from "../models/rider.js";
+import {faker} from "@faker-js/faker";
 
-const updateRider = catchAsync(async (req, res) => {
+const addRider = catchAsync(async (req, res) => {
+    const {name, phone} = req.body;
+    const rider = await Rider.create({name: faker.name.fullName(), phone: faker.phone.number("+91##########")});
+    console.log(rider);
+    res.status(200).json({message: "Rider Added", rider});
+});
+
+const updateRiderLocation = catchAsync(async (req, res) => {
     const {id, location} = req.body;
     const rider = JSON.parse(await redis.getRiderData(id.toString()));
     rider.location = location;
@@ -12,14 +18,19 @@ const updateRider = catchAsync(async (req, res) => {
     res.status(200).json({message: "data updated"});
 });
 
-const setRider = catchAsync(async (req, res) => {
+const setRiderLocation = catchAsync(async (req, res) => {
     await redis.setRiderData(req.body);
     res.status(200).json({message: "New Rider Added"});
 });
-
-const getRider = catchAsync(async (req, res) => {
++6;
+const getRiderLocation = catchAsync(async (req, res) => {
     const rider = JSON.parse(await redis.getRiderData(req.query.id));
-    res.status(200).json({rider});
+    await Rider.create({
+        name: "Rajiv",
+        phone: "+91100",
+        paths: [1, 2, 3],
+    });
+    res.status(200).json({rider});  
 });
 
-export default {getRider, setRider, updateRider};
+export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider};

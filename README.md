@@ -2,6 +2,28 @@
 
 Why this name: The Egyptian God of Messeges. The server acts as a messenger between different optimzation algorithms to fetch details between them.
 
+## Api's needed:
+
+### Mobile End
+
+-   [] View their path
+-   [] Bin Packing
+-   [] get list of orders
+-   [] update riders location
+-   [] update riders status
+-   [] check for fake attempt
+
+### Warehouse Dashboard
+
+-   [x] Add a new Rider
+-   [] Add a Delivery item
+-   [] A route that starts that routing process.
+-   [] Search feature using package id, rider id, which includes barcode
+-   [] get details of rider including location
+-   [] store image of defective items when adding a new pickup point
+-   [] Search packages based on date, rider, delivery status
+-   [] add a new pickup point and run dynamic algo - also update path the rider
+<!--
 To generate the .pb.go file for go using protoc from the root Directory:
 
 ```shell
@@ -57,7 +79,7 @@ struct BinPackingResponse{
 
 #### Route Planner
 
-```go
+````go
 
 struct Package{
     length	float
@@ -90,4 +112,5 @@ struct CVRPResponse{
     vehicle_count   int32
     paths           Path[]
 }
-```
+``` -->
+````

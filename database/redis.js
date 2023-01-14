@@ -1,12 +1,10 @@
 import redis from "redis";
 const client = redis.createClient();
-
 (async () => {
     await client.connect();
 })();
 
 function getHashData(key, id) {
-    console.log(key, id);
     return client.hGet(key, id);
 }
 
@@ -27,7 +25,6 @@ function getStringData(key) {
 }
 
 function geosearch(key, latitude, longitude) {
-    console.log(key, latitude, longitude);
     return client.geoSearchWith(key, {latitude, longitude}, {radius: 50, unit: "km"}, ["WITHCOORD"], {SORT: "ASC"});
 }
 function setStringData(key, value) {

@@ -2,10 +2,12 @@ import express from "express";
 import controllers from "../controllers/rider.controller.js";
 
 const router = express.Router();
-router.get("/location", controllers.getRider);
 
-router.post("/location", controllers.setRider);
+router.post("/add", controllers.addRider);
+router.get("/location", controllers.getRiderLocation);
 
-router.patch("/location", controllers.updateRider);
+router.post("/location", controllers.setRiderLocation);
+
+router.patch("/location", controllers.updateRiderLocation);
 
 export default router;

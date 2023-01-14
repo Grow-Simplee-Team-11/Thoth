@@ -9,6 +9,8 @@ const packageSchema = new Schema(
             length: {type: Number, required: true},
             breadth: {type: Number, required: true},
         },
+        sku_id: {type: String, require: true},
+        deliver_to:{name:{type:String,required:true},number:{type:String,required:true}},
         delivery_status: {type: String, default: "CREATED"},
         coordinates: {
             lat: {type: Number, required: true},
