@@ -16,13 +16,13 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 ### Warehouse Dashboard
 
 -   [x] Add a new Rider
--   [] Add a Delivery item
+-   [x] Add a Delivery item
+-   [] add a new pickup point and run dynamic algo - also update path the rider
 -   [] A route that starts that routing process.
 -   [] Search feature using package id, rider id, which includes barcode
 -   [] get details of rider including location
 -   [] store image of defective items when adding a new pickup point
 -   [] Search packages based on date, rider, delivery status
--   [] add a new pickup point and run dynamic algo - also update path the rider
 <!--
 To generate the .pb.go file for go using protoc from the root Directory:
 

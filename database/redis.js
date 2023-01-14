@@ -1,5 +1,6 @@
+import config from "../config/config.js";
 import redis from "redis";
-const client = redis.createClient();
+const client = redis.createClient({url: config.redis});
 (async () => {
     await client.connect();
 })();
@@ -49,11 +50,11 @@ const getHub = () => {
 };
 
 const addGeoData = (coordinates, id) => {
-    return setGeoData("package:coordinate", coordinates.x, coordinates.y, id);
+    return setGeoData("package:coordinate", coordinates.latitude, coordinates.longitude, id);
 };
 
 const getGeoLocations = coordinates => {
-    return geosearch("package:coordinate", coordinates.x, coordinates.y);
+    return geosearch("package:coordinate", coordinates.latitude, coordinates.longitude);
 };
 
 const setRiderData = async value => {

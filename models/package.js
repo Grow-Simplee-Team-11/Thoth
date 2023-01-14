@@ -3,13 +3,13 @@ const Schema = mongoose.Schema;
 
 const packageSchema = new Schema(
     {
-        image_url: {type: String, required: true},
+        image_url: {type: String},
         item_id: {type: String, required: true},
-        deliver_to:{name:{type:String,required:true},number:{type:String,required:true}},
+        deliver_to:{name:{type:String,required:true},phone_number:{type:String,required:true}},
         status: {type: String, enum: ['CREATED', 'DELIVERED', 'PICKED', 'FAKE_ATTEMPT', 'DAMAGED'], default: "CREATED"},
         coordinates: {
-            lat: {type: Number, required: true},
-            long: {type: Number, required: true},
+            latitude: {type: Number, required: true},
+            longitude: {type: Number, required: true},
             address: {type: String, required: true},
         },
         rider_assigned: {type: String},

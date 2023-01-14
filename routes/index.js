@@ -12,6 +12,7 @@
 
 import express from "express";
 import riderRoute from "./rider.route.js";
+import packageRoute from "./package.route.js";
 import config from "../config/config.js";
 
 const router = express.Router();
@@ -21,6 +22,10 @@ const defaultRoutes = [
         path: "/rider",
         route: riderRoute,
     },
+    {
+        path: "/package",
+        route: packageRoute,
+    }
 ];
 
 const devRoutes = [

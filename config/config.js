@@ -15,4 +15,6 @@ export default {
             useUnifiedTopology: true,
         },
     },
+    redis: envVars.REDIS_URL,
+    googleApiKey: envVars.GOOGLE_API_KEY,
 };
