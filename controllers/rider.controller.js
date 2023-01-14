@@ -1,6 +1,7 @@
 import redis from "../database/redis.js";
 import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
+import Package from "../models/package.js";
 import {faker} from "@faker-js/faker";
 
 const addRider = catchAsync(async (req, res) => {
@@ -22,7 +23,7 @@ const setRiderLocation = catchAsync(async (req, res) => {
     await redis.setRiderData(req.body);
     res.status(200).json({message: "New Rider Added"});
 });
-+6;
+
 const getRiderLocation = catchAsync(async (req, res) => {
     const rider = JSON.parse(await redis.getRiderData(req.query.id));
     await Rider.create({
@@ -33,4 +34,11 @@ const getRiderLocation = catchAsync(async (req, res) => {
     res.status(200).json({rider});  
 });
 
-export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider};
+const getPackageListFromRider = catchAsync(async (req, res) => {
+    const {rider_id} = req.body;
+    const rider = await Rider.findById(rider_id);
+    const packageList = await Package.find({rider_id});
+    res.status(200).json({message: "Package List", packages: packageList}); 
+});
+
+export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getPackageListFromRider};
