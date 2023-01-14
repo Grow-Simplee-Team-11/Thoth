@@ -8,10 +8,9 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 -   [] View their path - duplicate
 -   [] Bin Packing
--   [] get list of orders
--   [] update riders location
--   [] update riders status
--   [] check for fake attempt
+-   [x] update riders location
+-   [x] update riders status
+-   [] update delivery status - check fake attempt
 
 ### Warehouse Dashboard
 
@@ -19,7 +18,7 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 -   [x] Add a Delivery item
 -   [] Search feature using package id, rider id, which includes barcode
 -   [] Search packages based on date, delivery status
--   [] add a new pickup point and run dynamic algo - also update path the rider
+-   [] add a new pickup point and run dynamic algo - also update path the rider, check for erronous items
 -   [] A route that starts that routing process.
 -   [] store image of defective items when adding a new pickup point
 <!--
