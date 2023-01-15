@@ -34,11 +34,11 @@ const getRiderLocation = catchAsync(async (req, res) => {
     res.status(200).json({rider});  
 });
 
-const getPackageListFromRider = catchAsync(async (req, res) => {
+const getRiderDetails = catchAsync(async (req, res) => {
     const {rider_id} = req.query;
     const rider = await Rider.findById(rider_id);
     const packageList = await Package.find({rider_id});
-    res.status(200).json({message: "Package List", packages: packageList}); 
+    res.status(200).json({message: "Rider Details", rider: rider, packages: packageList}); 
 });
 
-export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getPackageListFromRider};
+export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getRiderDetails};
