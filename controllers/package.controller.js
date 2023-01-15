@@ -64,4 +64,11 @@ const getPackageDetails = catchAsync(async (req, res) => {
     res.status(200).json({message: "Package Details", pkg: pkg, item: item, rider: rider});
 });
 
-export default {addItem, addDeliveryPackage, getPackageDetails};
+const getPackageList = catchAsync(async (req, res) => {
+    const {sku_id} = req.query;
+    const item = await Item.findOne({name: sku_id});
+    const pkgList = await Package.find({item_id: item.id})
+    res.status(200).json({message: "Package List", pkgList: pkgList});
+});
+
+export default {addItem, addDeliveryPackage, getPackageDetails, getPackageList};
