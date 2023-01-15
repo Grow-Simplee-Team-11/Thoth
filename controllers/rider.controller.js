@@ -35,7 +35,7 @@ const getRiderLocation = catchAsync(async (req, res) => {
 });
 
 const getPackageListFromRider = catchAsync(async (req, res) => {
-    const {rider_id} = req.body;
+    const {rider_id} = req.query;
     const rider = await Rider.findById(rider_id);
     const packageList = await Package.find({rider_id});
     res.status(200).json({message: "Package List", packages: packageList}); 

@@ -12,7 +12,7 @@ const packageSchema = new Schema(
             longitude: {type: Number, required: true},
             address: {type: String, required: true},
         },
-        rider_assigned: {type: Schema.Types.ObjectId},
+        rider_id: {type: Schema.Types.ObjectId},
         delivered_time: {type: Date},
         type: {type: String, enum: ['DELIVERY', 'PICKUP']},
     },
