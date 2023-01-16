@@ -112,3 +112,9 @@ struct CVRPResponse{
 }
 ``` -->
 ````
+
+
+- awb_id - unique product  , sku_id - item
+- length weight height breadth - errorenous
+
+- pickup package: skuid , 

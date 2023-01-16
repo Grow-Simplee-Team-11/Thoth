@@ -9,7 +9,6 @@ const binSchema = new Schema(
             height: {type: String, required: true},
             weight: {type: String, required: true},
         },
-        rider_id: {type: Schema.Types.ObjectId},
         packages: [
             {
                 package_id: {type: Schema.Types.ObjectId},

@@ -8,7 +8,7 @@ import redis from "../database/redis.js";
 
 const createItem = async (name, dimensions) => {
     const item = await Item.findOne({name});
-    if(item) {
+    if (item) {
         return item;
     }
     return await Item.create({
@@ -24,22 +24,22 @@ const addItem = catchAsync(async (req, res) => {
     res.status(200).json({message: "Item Added", item});
 });
 
-const getCoordinatesFromAddress = (address) => {
+const getCoordinatesFromAddress = address => {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${config.googleApiKey}`);
-}
+};
 
 const addDeliveryPackage = catchAsync(async (req, res) => {
-    const {name,  deliver_to, address, sku_id, dimensions} = req.body;
+    const {name, deliver_to, address, sku_id, dimensions} = req.body;
     const {data} = await getCoordinatesFromAddress(address);
     const coordinates = {
         latitude: data.results[1].geometry.location.lat,
         longitude: data.results[1].geometry.location.lng,
-        address
+        address,
     };
     const item = await createItem(sku_id, dimensions);
     const deliveryPackage = await Package.create({
         name,
-        item_id:await item.id,
+        item_id: await item.id,
         deliver_to: {
             name: deliver_to.name,
             phone_number: deliver_to.phone_number,
@@ -47,9 +47,9 @@ const addDeliveryPackage = catchAsync(async (req, res) => {
         coordinates: {
             latitude: Math.floor(coordinates.latitude * config.scalingFactor),
             longitude: Math.floor(coordinates.longitude * config.scalingFactor),
-            address
+            address,
         },
-        type: 'DELIVERY',
+        type: "DELIVERY",
     });
     console.log(deliveryPackage);
     await redis.addGeoData(coordinates, deliveryPackage.id);
@@ -67,8 +67,8 @@ const getPackageDetails = catchAsync(async (req, res) => {
 const getPackageList = catchAsync(async (req, res) => {
     const {sku_id} = req.query;
     const item = await Item.findOne({name: sku_id});
-    const pkgList = await Package.find({item_id: item.id})
+    const pkgList = await Package.find({item_id: item.id});
     res.status(200).json({message: "Package List", pkgList: pkgList});
 });
 
-export default {addItem, addDeliveryPackage, getPackageDetails, getPackageList};
+export default {createItem, getCoordinatesFromAddress, addItem, addDeliveryPackage, getPackageDetails, getPackageList};
