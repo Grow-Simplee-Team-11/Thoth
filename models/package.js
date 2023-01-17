@@ -6,8 +6,9 @@ const packageSchema = new Schema(
         image_url: {type: String},
         item_id: {type: String},
         awb_no: {type: String},
+
         deliver_to: {name: {type: String}, phone_number: {type: String}},
-        status: {type: String, enum: ["CREATED", "DELIVERED", "PICKED", "FAKE_ATTEMPT", "DAMAGED"], default: "CREATED"},
+
         coordinates: {
             latitude: {type: Number},
             longitude: {type: Number},
