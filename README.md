@@ -46,7 +46,7 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
     status: []
     }
 
--   Error Calculation: return error percentage calculation
+-  done Error Calculation: return error percentage calculation
 
 <!--
 To generate the .pb.go file for go using protoc from the root Directory:
