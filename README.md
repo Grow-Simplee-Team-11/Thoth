@@ -24,21 +24,13 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 ## Day-2
 
--   Get all routes
-
-    -   If rider present, return details of rider as well
-    -   need no. of points , no of packages with a wrapper to return only the locations..
-    -   if rider id is given return for that rider.
 
 -   Change rider endpoint
 
 -   For a particular route
-
     -   Return all details of a route
 
--   Return all packages based on status query.
 
--   For a rider Id, all routes date wise sorted
 
 -   route and rider
     {
@@ -46,6 +38,12 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
     status: []
     }
 
+-   Get all routes
+
+    -   If rider present, return details of rider as well
+    -   need no. of points , no of packages with a wrapper to return only the locations..
+    -   if rider id is given return for that rider.
+-   For a rider Id, all routes date wise sorted
 -  done Error Calculation: return error percentage calculation
 
 <!--
