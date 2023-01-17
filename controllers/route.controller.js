@@ -2,7 +2,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
 import Package from "../models/package.js";
 import Route from "../models/route.js";
-import { groupPackagesByLocation, getPackageData, getRouteData } from "../utils/utility.js";
+import { groupPackagesByLocation } from "../utils/utility.js";
 
 const addRoute = catchAsync(async (req, res) => {
     const { rider_id, paths } = req.body;

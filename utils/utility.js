@@ -72,24 +72,5 @@ const groupPackagesByLocation = packageList => {
     return groupedPackagesByLocation;
 };
 
-
-const getPackageData = (packageId) => {
-    return Package.findById(packageId);
-};
-
-const getRouteData = async (route) => {
-    console.log("route =", route);
-    // const route = await Route.findById(routeId);
-    const pkgList = await Promise.all(route.paths.map(getPackageData));
-    console.log("pkgs =", pkgList);
-    const groupedPackages = groupPackagesByLocation(pkgList);
-    
-    const routeObject = {
-        packages: groupedPackages,
-    }
-
-    return await routeObject;
-};
-
-export { RandomRange, getCoordinatesFromAddress, calculateErrorfromPackage, groupPackagesByLocation, getPackageData, getRouteData };
+export { RandomRange, getCoordinatesFromAddress, calculateErrorfromPackage, groupPackagesByLocation };
 
