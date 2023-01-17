@@ -6,7 +6,7 @@ const statusSchema = new Schema(
         status: {
             type: String,
             enum: [
-                "CREATED",
+                "IN_WAREHOUSE",
                 "IN_SCAN",
                 "WEIGHING",
                 "TAMPER_CHECK",
@@ -19,9 +19,9 @@ const statusSchema = new Schema(
                 "FAKE_ATTEMPT",
                 "DAMAGED",
             ],
-            default: "CREATED",
+            default: "IN_WAREHOUSE",
         },
-        package_id: {type: Schema.Types.ObjectId, ref: 'Package'},
+        package_id: {type: Schema.Types.ObjectId, ref: "Package"},
     },
     {timestamps: true}
 );
