@@ -58,9 +58,9 @@ const getPackageDetails = catchAsync(async (req, res) => {
 });
 
 const getPackageList = catchAsync(async (req, res) => {
-    const {sku_id} = req.query;
-    const pkgList = await Package.find({sku_id: sku_id});
-    res.status(200).json({message: "Package List", pkgList: pkgList});
+    const {awb_id} = req.query;
+    const pkg = await Package.findOne({awb_no});
+    res.status(200).json({message: "Package List", package: pkg});
 });
 
 export default {getCoordinatesFromAddress, addDeliveryPackage, getPackageDetails, getPackageList};
