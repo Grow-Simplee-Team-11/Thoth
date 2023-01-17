@@ -1,9 +1,7 @@
 import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
-import Item from "../models/item.js";
 import Package from "../models/package.js";
 import config from "../config/config.js";
-import axios from "axios";
 import redis from "../database/redis.js";
 import {getCoordinatesFromAddress} from "../utils/utility.js";
 
@@ -68,4 +66,4 @@ const getPackageList = catchAsync(async (req, res) => {
     res.status(200).json({message: "Package List", pkgList: pkgList});
 });
 
-export {createItem, getCoordinatesFromAddress, addItem, addDeliveryPackage, getPackageDetails, getPackageList};
+export default {createItem, getCoordinatesFromAddress, addItem, addDeliveryPackage, getPackageDetails, getPackageList};
