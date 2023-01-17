@@ -21,6 +21,33 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 -   [] add a new pickup point and run dynamic algo - also update path the rider, check for erronous items
 -   [] A route that starts that routing process.
 -   [] store image of defective items when adding a new pickup point
+
+## Day-2
+
+-   Get all routes
+
+    -   If rider present, return details of rider as well
+    -   need no. of points , no of packages with a wrapper to return only the locations..
+    -   if rider id is given return for that rider.
+
+-   Change rider endpoint
+
+-   For a particular route
+
+    -   Return all details of a route
+
+-   Return all packages based on status query.
+
+-   For a rider Id, all routes date wise sorted
+
+-   route and rider
+    {
+    latest_status:
+    status: []
+    }
+
+-   Error Calculation: return error percentage calculation
+
 <!--
 To generate the .pb.go file for go using protoc from the root Directory:
 
@@ -111,10 +138,12 @@ struct CVRPResponse{
     paths           Path[]
 }
 ``` -->
-````
+
+```
 
 
 - awb_id - unique product  , sku_id - item
 - length weight height breadth - errorenous
 
-- pickup package: skuid , 
+- pickup package: skuid ,
+```
