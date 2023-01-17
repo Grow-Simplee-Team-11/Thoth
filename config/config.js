@@ -15,6 +15,15 @@ export default {
             useUnifiedTopology: true,
         },
     },
+    auth: {
+        admin: {
+            email: "yo@admin.com",
+            password: "Admin098",
+        },
+        rider: {
+            password: "Rider098",
+        },
+    },
     redis: envVars.REDIS_URL,
     googleApiKey: envVars.GOOGLE_API_KEY,
     scalingFactor: 1e6,

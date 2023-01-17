@@ -1,10 +1,9 @@
 import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
-import Item from "../models/item.js";
 import Package from "../models/package.js";
 import config from "../config/config.js";
-import axios from "axios";
 import redis from "../database/redis.js";
+import {getCoordinatesFromAddress} from "../utils/utility.js";
 
 const createItem = async (name, dimensions) => {
     const item = await Item.findOne({name});
@@ -23,10 +22,6 @@ const addItem = catchAsync(async (req, res) => {
     console.log(item);
     res.status(200).json({message: "Item Added", item});
 });
-
-const getCoordinatesFromAddress = address => {
-    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${config.googleApiKey}`);
-};
 
 const addDeliveryPackage = catchAsync(async (req, res) => {
     const {name, deliver_to, address, sku_id, dimensions} = req.body;
