@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../config/config.js";
-import Package from "../models/package.js";
+import catchAsync from "./catchAsync.js";
+import Rider from "../models/rider.js";
 import Route from "../models/route.js";
 
 const RandomRange = (min, max) => {

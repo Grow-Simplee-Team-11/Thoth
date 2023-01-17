@@ -14,6 +14,7 @@ import express from "express";
 import riderRoute from "./rider.route.js";
 import routeRoute from "./route.route.js";
 import packageRoute from "./package.route.js";
+import statusRoute from "./status.route.js";
 import authRoute from "./auth.route.js";
 import utilityRoute from "./utility.route.js";
 import config from "../config/config.js";
@@ -32,6 +33,10 @@ const defaultRoutes = [
     {
         path: "/package",
         route: packageRoute,
+    },
+    {
+        path: "/status",
+        route: statusRoute,
     },
     {
         path: "/auth",
