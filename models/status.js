@@ -21,7 +21,7 @@ const statusSchema = new Schema(
             ],
             default: "CREATED",
         },
-        package_id: {type: Schema.Types.ObjectId},
+        package_id: {type: Schema.Types.ObjectId, ref: 'Package'},
     },
     {timestamps: true}
 );

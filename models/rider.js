@@ -6,7 +6,7 @@ const riderSchema = new Schema(
         name: {type: String, required: true},
         phone: {type: String, required: true},
         email: {type: String, required: true},
-        route_id: {type: Schema.Types.ObjectId},
+        route_id: {type: Schema.Types.ObjectId, ref: 'Route'},
     },
     {timestamps: true}
 );
