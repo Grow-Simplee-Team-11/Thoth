@@ -3,30 +3,7 @@ import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
 import Package from "../models/package.js";
 import {faker} from "@faker-js/faker";
-
-const groupPackagesByLocation = packageList => {
-    const groupedPackages = {};
-
-    packageList.forEach(pkg => {
-        const coordKey = String(pkg.coordinates.latitude) + String(pkg.coordinates.longitude);
-        console.log(coordKey);
-        if (groupedPackages[coordKey]) {
-            groupedPackages[coordKey].push(pkg);
-        } else {
-            groupedPackages[coordKey] = [pkg];
-        }
-    });
-
-    let groupedPackagesByLocation = [];
-    for (const [coordKey, pkgList] of Object.entries(groupedPackages)) {
-        const groupedObject = {};
-        groupedObject.packages = pkgList;
-        groupedObject.coordinates = pkgList[0].coordinates;
-        groupedPackagesByLocation.push(groupedObject);
-    }
-
-    return groupedPackagesByLocation;
-};
+import {groupPackagesByLocation} from "../utils/utility.js";
 
 const addRider = catchAsync(async (req, res) => {
     const {name, phone} = req.body;
@@ -58,12 +35,12 @@ const getRiderLocation = catchAsync(async (req, res) => {
     res.status(200).json({rider});
 });
 
-const getRiderDetails = catchAsync(async (req, res) => {
-    const {rider_id} = req.query;
-    const rider = await Rider.findById(rider_id);
-    const packageList = await Package.find({rider_id});
-    const groupedPackageList = groupPackagesByLocation(packageList);
-    res.status(200).json({message: "Rider Details", rider: rider, packages: groupedPackageList});
-});
+// const getRiderDetails = catchAsync(async (req, res) => {
+//     const {rider_id} = req.query;
+//     const rider = await Rider.findById(rider_id);
+//     const packageList = await Package.find({rider_id});
+//     const groupedPackageList = groupPackagesByLocation(packageList);
+//     res.status(200).json({message: "Rider Details", rider: rider, packages: groupedPackageList});
+// });
 
-export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getRiderDetails};
+export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider};

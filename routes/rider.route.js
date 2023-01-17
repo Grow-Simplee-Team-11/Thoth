@@ -4,7 +4,7 @@ import controllers from "../controllers/rider.controller.js";
 const router = express.Router();
 
 router.post("/add", controllers.addRider);
-router.get("/details", controllers.getRiderDetails);
+// router.get("/details", controllers.getRiderDetails);
 
 router.get("/location", controllers.getRiderLocation);
 
