@@ -53,7 +53,6 @@ const groupPackagesByLocation = packageList => {
 
     packageList.forEach(pkg => {
         const coordKey = String(pkg.coordinates.latitude) + String(pkg.coordinates.longitude);
-        console.log(coordKey);
         if (groupedPackages[coordKey]) {
             groupedPackages[coordKey].push(pkg);
         } else {
@@ -72,5 +71,4 @@ const groupPackagesByLocation = packageList => {
     return groupedPackagesByLocation;
 };
 
-export { RandomRange, getCoordinatesFromAddress, calculateErrorfromPackage, groupPackagesByLocation };
-
+export {RandomRange, getCoordinatesFromAddress, calculateErrorfromPackage, groupPackagesByLocation};
