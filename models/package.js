@@ -7,7 +7,6 @@ const packageSchema = new Schema(
         item_id: {type: Schema.Types.ObjectId, required: true},
         awb_no: {type: String},
         deliver_to: {name: {type: String, required: true}, phone_number: {type: String, required: true}},
-        status: {type: String, enum: ["CREATED", "DELIVERED", "PICKED", "FAKE_ATTEMPT", "DAMAGED"], default: "CREATED"},
         coordinates: {
             latitude: {type: Number, required: true},
             longitude: {type: Number, required: true},
