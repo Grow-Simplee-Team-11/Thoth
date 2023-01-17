@@ -47,4 +47,14 @@ const getRouteList = catchAsync(async (req, res) => {
     res.status(200).json({message: "Route list", routes: routeList});
 });
 
-export default {addRoute, getRouteDetails, getRouteList};
+const updateRider = catchAsync(async (req, res) => {
+    const {route_id, rider_id} = req.body;
+    const rider = Route.findByIdAndUpdate(route_id, {rider_id: rider_id}, function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    res.status(200).json({message: "Rider updated"});
+});
+
+export default {addRoute, getRouteDetails, getRouteList, updateRider};

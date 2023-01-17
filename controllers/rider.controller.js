@@ -4,6 +4,7 @@ import Rider from "../models/rider.js";
 import Package from "../models/package.js";
 import {faker} from "@faker-js/faker";
 import {groupPackagesByLocation} from "../utils/utility.js";
+import Route from "../models/route.js";
 
 const addRider = catchAsync(async (req, res) => {
     const {name, phone} = req.body;
@@ -35,6 +36,22 @@ const getRiderLocation = catchAsync(async (req, res) => {
     res.status(200).json({rider});
 });
 
+const getPackagesOfRider = catchAsync(async (req, res) => {
+    const {rider_id} = req.query;
+    const route = await Route.findOne({rider_id}).populate("paths");
+    const rider = await Rider.findById(rider_id);
+    const groupedPackages = groupPackagesByLocation(route.paths);
+    const numberOfGroups = groupedPackages.length;
+    const numberOfPackages = route.paths.length;
+
+    res.status(200).json({
+        message: "Rider Packages",
+        route: groupedPackages,
+        number_points: numberOfGroups,
+        number_packages: numberOfPackages,
+    });
+});
+
 // const getRiderDetails = catchAsync(async (req, res) => {
 //     const {rider_id} = req.query;
 //     const rider = await Rider.findById(rider_id);
@@ -43,4 +60,4 @@ const getRiderLocation = catchAsync(async (req, res) => {
 //     res.status(200).json({message: "Rider Details", rider: rider, packages: groupedPackageList});
 // });
 
-export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider};
+export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getPackagesOfRider};
