@@ -4,9 +4,9 @@ const Schema = mongoose.Schema;
 const packageSchema = new Schema(
     {
         image_url: {type: String},
-        item_id: {type: String},
+        sku_id: {type: String},
         awb_no: {type: String},
-        
+
         deliver_to: {name: {type: String}, phone_number: {type: String}},
 
         coordinates: {
@@ -15,10 +15,10 @@ const packageSchema = new Schema(
             address: {type: String},
         },
         dimensions: {
-            length: {type: String},
-            breadth: {type: String},
-            height: {type: String},
-            weight: {type: String},
+            length: {type: String, default: 0},
+            breadth: {type: String, default: 0},
+            height: {type: String, default: 0},
+            weight: {type: String, default: 0},
         },
         delivered_time: {type: Date},
         type: {type: String, enum: ["DELIVERY", "PICKUP"]},

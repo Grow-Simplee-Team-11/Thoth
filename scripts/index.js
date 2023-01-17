@@ -23,7 +23,7 @@ const addDropLocation = async row => {
         const p = await Package({
             status: "CREATED",
             deliver_to: {name: row[3], phone_number: row[2]},
-            item_id: row[4],
+            sku_id: row[4],
             image_url: "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/clock.jpeg",
             type: "DELIVERY",
             coordinates,
