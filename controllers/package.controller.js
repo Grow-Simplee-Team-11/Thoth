@@ -60,7 +60,7 @@ const getPackageDetails = catchAsync(async (req, res) => {
 
 const getPackageList = catchAsync(async (req, res) => {
     // const {awb_id} = req.query;
-    const pkg = await Package.findOne({...req.query});
+    const pkg = await Package.find({...req.query});
     res.status(200).json({message: "Package List", package: pkg});
 });
 
