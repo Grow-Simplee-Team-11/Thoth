@@ -1,0 +1,41 @@
+syntax="proto3";
+
+package optimizer;
+
+service optimizer{
+    rpc StartService(Item) returns (ServiceResponse){}
+}
+
+message ServiceResponse{}
+
+message Dimension{
+    float length=1;
+    float width=2;
+    float height=3;
+}
+
+message Position{
+    float x=1;
+    float y=2;
+    float z=3;
+}
+ 
+
+message Coordinate{
+    int64 longtitude=1;
+    int64 latitude=2;
+}
+
+message Item{
+    string id=1;
+    Dimension size=2;
+    Position position=3;
+    Coordinate coordinates=4;
+    float weight=5;
+    float volume=6;
+}
+
+message Bin{
+    Dimension size=1;
+    float capacity=2;
+}
