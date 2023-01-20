@@ -24,7 +24,7 @@ import {getCoordinatesFromAddress} from "../utils/utility.js";
 // });
 
 const addDeliveryPackage = catchAsync(async (req, res) => {
-    const {awb_id, sku_id, deliver_to, dimensions, type} = req.body;
+    const {awb_id, sku_id, deliver_to, address, dimensions, type} = req.body;
     const {data} = await getCoordinatesFromAddress(address);
     const coordinates = {
         latitude: data.results[1].geometry.location.lat,
