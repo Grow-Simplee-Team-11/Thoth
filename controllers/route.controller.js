@@ -30,6 +30,11 @@ const getRouteDetails = catchAsync(async (req, res) => {
 });
 
 const getRouteList = catchAsync(async (req, res) => {
+    const query = {
+        _id: req.query.route_id,
+        rider_id: req.query.rider_id,
+    };
+
     let routeList = await Route.find({...req.query})
         .populate("paths")
         .lean();
