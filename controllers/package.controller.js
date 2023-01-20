@@ -24,7 +24,7 @@ import {getCoordinatesFromAddress} from "../utils/utility.js";
 // });
 
 const addDeliveryPackage = catchAsync(async (req, res) => {
-    const {name, deliver_to, address, sku_id, dimensions} = req.body;
+    const {awb_id, sku_id, deliver_to, dimensions, type} = req.body;
     const {data} = await getCoordinatesFromAddress(address);
     const coordinates = {
         latitude: data.results[1].geometry.location.lat,
@@ -32,18 +32,19 @@ const addDeliveryPackage = catchAsync(async (req, res) => {
         address,
     };
     const deliveryPackage = await Package.create({
-        name,
-        sku_id: sku_id,
+        awb_id,
+        sku_id,
         deliver_to: {
             name: deliver_to.name,
             phone_number: deliver_to.phone_number,
         },
+        dimensions,
         coordinates: {
             latitude: Math.floor(coordinates.latitude * config.scalingFactor),
             longitude: Math.floor(coordinates.longitude * config.scalingFactor),
             address,
         },
-        type: "DELIVERY",
+        type,
     });
     console.log(deliveryPackage);
     await redis.addGeoData(coordinates, deliveryPackage.id);

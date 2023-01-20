@@ -5,7 +5,7 @@ const packageSchema = new Schema(
     {
         image_url: {type: String},
         sku_id: {type: String},
-        awb_no: {type: String},
+        awb_id: {type: String},
 
         deliver_to: {name: {type: String}, phone_number: {type: String}},
 
