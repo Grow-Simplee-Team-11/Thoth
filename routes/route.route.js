@@ -6,6 +6,6 @@ const router = express.Router();
 router.get("/details", controllers.getRouteDetails);
 router.post("/add", controllers.addRoute);
 router.get("/list", controllers.getRouteList);
-router.post("/update_rider", controllers.updateRider);
+router.patch("/update_rider", controllers.updateRider);
 
 export default router;

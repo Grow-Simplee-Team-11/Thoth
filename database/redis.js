@@ -57,8 +57,7 @@ const getGeoLocations = coordinates => {
     return geosearch("package:coordinate", coordinates.latitude, coordinates.longitude);
 };
 
-const setRiderData = async value => {
-    const id = await incId("rider:id");
+const setRiderData = async (value, id) => {
     return setHashData("rider:data", id, {...value, id});
 };
 

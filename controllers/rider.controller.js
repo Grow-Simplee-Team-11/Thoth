@@ -7,33 +7,31 @@ import {groupPackagesByLocation} from "../utils/utility.js";
 import Route from "../models/route.js";
 
 const addRider = catchAsync(async (req, res) => {
-    const {name, phone} = req.body;
-    const rider = await Rider.create({name: faker.name.fullName(), phone: faker.phone.number("+91##########")});
-    console.log(rider);
+    const {name, phone, email} = req.body;
+    const rider = await Rider.create({name, phone, email});
     res.status(200).json({message: "Rider Added", rider});
 });
 
 const updateRiderLocation = catchAsync(async (req, res) => {
-    const {id, location} = req.body;
-    const rider = JSON.parse(await redis.getRiderData(id.toString()));
-    rider.location = location;
+    const {rider_id, coordinates} = req.body;
+    const rider = JSON.parse(await redis.getRiderData(rider_id.toString()));
+    rider.coordinates = coordinates;
     await redis.updateRiderData(rider.id, rider);
+    console.log(rider);
     res.status(200).json({message: "data updated"});
 });
 
 const setRiderLocation = catchAsync(async (req, res) => {
-    await redis.setRiderData(req.body);
-    res.status(200).json({message: "New Rider Added"});
+    const {rider_id, coordinates} = req.body;
+    let value = {};
+    value.coordinates = coordinates;
+    await redis.setRiderData(value, rider_id);
+    res.status(200).json({message: "Rider location set", value});
 });
 
 const getRiderLocation = catchAsync(async (req, res) => {
-    const rider = JSON.parse(await redis.getRiderData(req.query.id));
-    await Rider.create({
-        name: "Rajiv",
-        phone: "+91100",
-        paths: [1, 2, 3],
-    });
-    res.status(200).json({rider});
+    const rider = JSON.parse(await redis.getRiderData(req.query.rider_id));
+    res.status(200).json({message: "Rider location", rider});
 });
 
 const getPackagesOfRider = catchAsync(async (req, res) => {
