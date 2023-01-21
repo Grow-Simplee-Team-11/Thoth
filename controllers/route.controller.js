@@ -32,7 +32,7 @@ const getRouteDetails = catchAsync(async (req, res) => {
 const getRouteList = catchAsync(async (req, res) => {
     let query = {};
     if (req.query.route_id) query._id = req.query.route_id;
-    else req.query.rider_id = req.query.rider_id;
+    else query.rider_id = req.query.rider_id;
 
     console.log({...query});
     let routeList = await Route.find({...query})
