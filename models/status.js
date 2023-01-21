@@ -8,7 +8,6 @@ const statusSchema = new Schema(
             enum: [
                 "IN_WAREHOUSE",
                 "IN_SCAN",
-                "WEIGHING",
                 "TAMPER_CHECK",
                 "BIN_PACKING",
                 "ROUTE_ASSIGNMENT",
@@ -17,7 +16,6 @@ const statusSchema = new Schema(
                 "DELIVERED",
                 "PICKED",
                 "FAKE_ATTEMPT",
-                "DAMAGED",
             ],
             default: "IN_WAREHOUSE",
         },
