@@ -1,6 +1,6 @@
 import catchAsync from "../utils/catchAsync.js";
-import Rider from "../models/rider.js";
 import Package from "../models/package.js";
+import Status from "../models/status.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
 import {getCoordinatesFromAddress} from "../utils/utility.js";
@@ -54,8 +54,8 @@ const addDeliveryPackage = catchAsync(async (req, res) => {
 const getPackageDetails = catchAsync(async (req, res) => {
     const {package_id} = req.query;
     const pkg = await Package.findById(package_id);
-    const rider = await Rider.findById(pkg.rider_id);
-    res.status(200).json({message: "Package Details", pkg: pkg, rider: rider});
+    const status = await Status.find({package_id}, "status createdAt -_id");
+    res.status(200).json({message: "Package Details", pkg, status});
 });
 
 const getPackageList = catchAsync(async (req, res) => {
