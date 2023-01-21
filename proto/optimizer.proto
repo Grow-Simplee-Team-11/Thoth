@@ -36,6 +36,9 @@ message Position{
 
 message OptimizerRequest{
     repeated Package packages=1;
+    Bin bin=2;
+    Coordinate warehouse=3;
+    int32 riders=4;
 }
 
 message Coordinate{

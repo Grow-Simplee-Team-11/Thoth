@@ -4,24 +4,20 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 ## Api's needed:
 
-### Mobile End
+## Need to work on
 
--   [] View their path - duplicate
--   [] Bin Packing
--   [x] update riders location
--   [x] update riders status
--   [] update delivery status - check fake attempt
+- image to s3
+- proto file merging with other services
 
-### Warehouse Dashboard
 
--   [x] Add a new Rider
--   [x] Add a Delivery item
--   [] Search feature using package id, rider id, which includes barcode
--   [] Search packages based on date, delivery status
--   [] add a new pickup point and run dynamic algo - also update path the rider, check for erronous items
--   [] A route that starts that routing process.
--   [] store image of defective items when adding a new pickup point
 
+
+- Admin Login
+- Get all routes (rider may or maynot exist) (with grouping based on package)
+- change rider of a route, can even assign
+- Get Route details of a particular route
+- Get all package list (with sku_id and awb_id as query param too)
+- For a particular package return all its details with all status.
 ## Day-2
 
 
