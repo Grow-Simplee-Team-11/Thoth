@@ -12,14 +12,14 @@ const addRider = catchAsync(async (req, res) => {
     res.status(200).json({message: "Rider Added", rider});
 });
 
-const updateRiderLocation = catchAsync(async (req, res) => {
-    const {rider_id, coordinates} = req.body;
-    const rider = JSON.parse(await redis.getRiderData(rider_id.toString()));
-    rider.coordinates = coordinates;
-    await redis.updateRiderData(rider.id, rider);
-    console.log(rider);
-    res.status(200).json({message: "data updated"});
-});
+// const updateRiderLocation = catchAsync(async (req, res) => {
+//     const {rider_id, coordinates} = req.body;
+//     const rider = JSON.parse(await redis.getRiderData(rider_id.toString()));
+//     rider.coordinates = coordinates;
+//     await redis.updateRiderData(rider.id, rider);
+//     console.log(rider);
+//     res.status(200).json({message: "data updated"});
+// });
 
 const setRiderLocation = catchAsync(async (req, res) => {
     const {rider_id, coordinates} = req.body;
@@ -30,7 +30,15 @@ const setRiderLocation = catchAsync(async (req, res) => {
 });
 
 const getRiderLocation = catchAsync(async (req, res) => {
-    const rider = JSON.parse(await redis.getRiderData(req.query.rider_id));
+    const {rider_id} = req.query;
+    let rider;
+    if (rider_id) rider = JSON.parse(await redis.getRiderData(req.query.rider_id));
+    else {
+        rider = await redis.getAllRiderData();
+        rider = rider.map(rdr => {
+            return JSON.parse(rdr);
+        });
+    }
     res.status(200).json({message: "Rider location", rider});
 });
 
@@ -58,4 +66,4 @@ const getPackagesOfRider = catchAsync(async (req, res) => {
 //     res.status(200).json({message: "Rider Details", rider: rider, packages: groupedPackageList});
 // });
 
-export default {setRiderLocation, getRiderLocation, updateRiderLocation, addRider, getPackagesOfRider};
+export default {setRiderLocation, getRiderLocation, addRider, getPackagesOfRider};

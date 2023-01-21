@@ -12,6 +12,6 @@ router.get("/location", controllers.getRiderLocation);
 
 router.post("/location", controllers.setRiderLocation);
 
-router.patch("/location", controllers.updateRiderLocation);
+// router.patch("/location", controllers.updateRiderLocation);
 
 export default router;

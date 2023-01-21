@@ -9,6 +9,10 @@ function getHashData(key, id) {
     return client.hGet(key, id);
 }
 
+function getAllHashData(key) {
+    return client.hVals(key);
+}
+
 function setHashData(key, id, value) {
     return client.hSet(key, id, JSON.stringify(value));
 }
@@ -69,6 +73,10 @@ const getRiderData = id => {
     return getHashData("rider:data", id);
 };
 
+const getAllRiderData = () => {
+    return getAllHashData("rider:data");
+};
+
 export default {
     getPickupId,
     setPickupData,
@@ -79,4 +87,5 @@ export default {
     setRiderData,
     updateRiderData,
     getRiderData,
+    getAllRiderData,
 };
