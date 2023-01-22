@@ -1,5 +1,5 @@
 import express from "express";
-import {calculateError} from "../controllers/utitlity.controller.js";
+import {calculateError} from "../controllers/utility.controller.js";
 
 const router = express.Router();
 

@@ -19,6 +19,7 @@ import binRoute from "./bin.route.js";
 import authRoute from "./auth.route.js";
 import utilityRoute from "./utility.route.js";
 import config from "../config/config.js";
+import serviceRoute from "./service.route.js";
 
 const router = express.Router();
 
@@ -50,6 +51,10 @@ const defaultRoutes = [
     {
         path: "/util",
         route: utilityRoute,
+    },
+    {
+        path: "/service",
+        route: serviceRoute,
     },
 ];
 
