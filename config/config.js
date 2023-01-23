@@ -28,4 +28,9 @@ export default {
     googleApiKey: envVars.GOOGLE_API_KEY,
     scalingFactor: 1e6,
     rabbitmq: envVars.RABBITMQ,
+    awsKeys: {
+        accessKeyId: envVars.AWS_ACCESS_KEY_ID,
+        secretAccessKey: envVars.AWS_SECRET_KEY,
+    },
+    privateBucket: envVars.PUBLIC_BUCKET,
 };

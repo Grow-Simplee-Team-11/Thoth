@@ -64,4 +64,17 @@ const getPackageList = catchAsync(async (req, res) => {
     res.status(200).json({message: "Package List", package: pkg});
 });
 
-export default {getCoordinatesFromAddress, addDeliveryPackage, getPackageDetails, getPackageList};
+const uploadImageController = catchAsync(async (req, res) => {
+    const {awb_id} = req.query;
+    const fileName = req.file.location;
+    const pkg = await Package.findOneAndUpdate(awb_id, {image_url: fileName});
+    res.status(200).json({message: "Image uploaded", pkg});
+});
+
+export default {
+    getCoordinatesFromAddress,
+    addDeliveryPackage,
+    getPackageDetails,
+    getPackageList,
+    uploadImageController,
+};
