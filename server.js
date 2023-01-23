@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 import app from "./app.js";
 import config from "./config/config.js";
 import logger from "./config/logger.js";
+import rabbit from "./utils/rabbitmq.js";
 
 let server;
 mongoose.set("strictQuery", false);
 
-mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
+mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
+    await rabbit.connect();
     logger.info("Connected to MongoDB");
     server = app.listen(config.port, () => {
         logger.info(`Listening to port ${config.port}`);

@@ -27,4 +27,5 @@ export default {
     redis: envVars.REDIS_URL,
     googleApiKey: envVars.GOOGLE_API_KEY,
     scalingFactor: 1e6,
+    rabbitmq: envVars.RABBITMQ,
 };
