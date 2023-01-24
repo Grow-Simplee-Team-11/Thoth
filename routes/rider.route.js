@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/add", controllers.addRider);
 router.get("/list", controllers.getPackagesOfRider);
+router.get("/all", controllers.getAllRiders);
 
 // router.get("/details", controllers.getRiderDetails);
 

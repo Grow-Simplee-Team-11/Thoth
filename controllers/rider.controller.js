@@ -58,6 +58,22 @@ const getPackagesOfRider = catchAsync(async (req, res) => {
     });
 });
 
+const getAllRiders = catchAsync(async (req, res) => {
+    let riders = await Rider.find({}).lean();
+    riders = await Promise.all(
+        riders.map(async rdr => {
+            const route = await Route.find({rider_id: rdr._id}).lean();
+            rdr.assigned = false;
+            if (route.length) {
+                rdr.assigned = true;
+            }
+            return rdr;
+        })
+    );
+
+    res.status(200).json({message: "Riders", riders});
+});
+
 // const getRiderDetails = catchAsync(async (req, res) => {
 //     const {rider_id} = req.query;
 //     const rider = await Rider.findById(rider_id);
@@ -66,4 +82,4 @@ const getPackagesOfRider = catchAsync(async (req, res) => {
 //     res.status(200).json({message: "Rider Details", rider: rider, packages: groupedPackageList});
 // });
 
-export default {setRiderLocation, getRiderLocation, addRider, getPackagesOfRider};
+export default {setRiderLocation, getRiderLocation, addRider, getPackagesOfRider, getAllRiders};
