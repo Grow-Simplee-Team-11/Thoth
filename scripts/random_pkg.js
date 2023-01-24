@@ -5,8 +5,6 @@ import fs from "fs";
 import config from "../config/config.js";
 import logger from "../config/logger.js";
 import {createStatus, getCoordinatesFromAddress} from "../utils/utility.js";
-import {parse} from "csv-parse";
-import {promisify} from "util";
 
 const generateRandomData = (address, coordinate) => {
     const data = {
@@ -38,48 +36,68 @@ const generateRandomData = (address, coordinate) => {
 let results = [];
 const promise = [];
 var i = 0;
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+let address;
+function parseCSV() {
+    address = fs.readFileSync("./scripts/dispatch.csv", "utf-8").split(/\r?\n/);
+    for (let i in address) {
+        address[i] = address[i].split('"')[1];
+    }
+}
 
-async function readCSV() {
-    return promisify(
-        fs
-            .createReadStream("./scripts/dispatch.csv")
-            .pipe(parse({delimiter: ","}))
-            .on("data", row => {
-                results.push(row);
-            })
-            .on("end", async err => {
-                console.log(results.length);
-            })
+function writeDataToFile(data) {
+    fs.appendFileSync(
+        "./tmp/dispatch.txt",
+        JSON.stringify(data.data.results[0]?.geometry.location.lat) +
+            " " +
+            JSON.stringify(data.data.results[0]?.geometry.location.lng) +
+            "\n"
     );
 }
 
-async function init() {
-    await readCSV();
-    console.log(results);
-}
+(async function main() {
+    parseCSV();
+    console.table(address);
+    await mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
+        console.log("Mongoose connected");
+    });
 
-init();
-// await mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
-//     console.log("Mongoose connected");
-// });
-// await Promise.all(
-//     results.map(async result => {
-//         if (result[0].charAt(0) === "#") {
-//             result[0] = result[0].slice(1);
-//         }
-//         const {data} = await getCoordinatesFromAddress(result[0]);
-//         i++;
-//         if (data != undefined && data.results.length > 0) {
-//             const pkg = generateRandomData(result[0], data.results[0]?.geometry.location);
-//             const dispatch = new Package(pkg);
-//             console.log(dispatch);
-//             promise.push(dispatch.save());
-//             // createStatus(dispatch.id, "IN_WAREHOUSE"));
-//         }
+    for await (const ad of address) {
+        const data = await getCoordinatesFromAddress(ad);
+        writeDataToFile(data);
+        if (data.data != undefined && data.data.results.length > 0) {
+            const pkg = generateRandomData(ad, data.data.results[0]?.geometry.location);
+            const dispatch = new Package(pkg);
+            console.log(dispatch);
+            promise.push(dispatch.save());
+        }
+        console.log(data);
+    }
+    await Promise.all(promise);
+    await mongoose.disconnect();
+    // address.forEach(async addres => {});
+})();
+// fs.createReadStream("./scripts/dispatch.csv")
+//     .pipe(parse({delimiter: ","}))
+//     .on("data", row => {
+//         results.push(row);
 //     })
-// ).then(async () => {
-//     console.log(promise.length, i);
-//     await Promise.all(promise);
+//     .on("end", async err => {
 
-//     await mongoose.disconnect();
-// });
+//         for()
+
+//         await Promise.all(
+//             results.map(async result => {
+//                 if (result[0].charAt(0) === "#") {
+//                     result[0] = result[0].slice(1);
+//                 }
+//                 await timeout(1000);
+//                 const data = await getCoordinatesFromAddress(result[0]);
+//             })
+//         ).then(async () => {
+//             console.log(promise.length, i);
+
+//         });
+//     });

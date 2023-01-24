@@ -1,11 +1,14 @@
 import axios from "axios";
 import config from "../config/config.js";
 import Status from "../models/status.js";
+import {setTimeout} from "timers/promises";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
 };
-
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 Number.prototype.toRad = function () {
     return (this * Math.PI) / 180;
 };
@@ -29,8 +32,12 @@ const haversineDistance = (riderCoordinates, pkgCoordinates) => {
     return R * c;
 };
 
-const getCoordinatesFromAddress = address => {
-    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${config.googleApiKey}`);
+const getCoordinatesFromAddress = async address => {
+    await setTimeout(25);
+    const data = await axios.get(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${config.googleApiKey}`
+    );
+    return data;
 };
 
 const calcAverage = (pkg, type) => {
