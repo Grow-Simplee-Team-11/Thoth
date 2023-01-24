@@ -1,8 +1,6 @@
 import axios from "axios";
 import config from "../config/config.js";
-import catchAsync from "./catchAsync.js";
-import Rider from "../models/rider.js";
-import Route from "../models/route.js";
+import Status from "../models/status.js";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -95,4 +93,15 @@ const groupPackagesByLocation = packageList => {
     return groupedPackagesByLocation;
 };
 
-export {RandomRange, getCoordinatesFromAddress, calculateErrorfromPackage, groupPackagesByLocation, haversineDistance};
+const createStatus = (package_id, status) => {
+    return Status.create({status, package_id});
+};
+
+export {
+    RandomRange,
+    getCoordinatesFromAddress,
+    calculateErrorfromPackage,
+    groupPackagesByLocation,
+    haversineDistance,
+    createStatus,
+};

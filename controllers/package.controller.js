@@ -3,7 +3,7 @@ import Package from "../models/package.js";
 import Status from "../models/status.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
-import {getCoordinatesFromAddress} from "../utils/utility.js";
+import {getCoordinatesFromAddress, createStatus} from "../utils/utility.js";
 
 // const createItem = async (name, dimensions) => {
 //     const item = await Item.findOne({name});
@@ -46,6 +46,7 @@ const addDeliveryPackage = catchAsync(async (req, res) => {
         },
         type,
     });
+    await createStatus(deliveryPackage._id, "IN_WAREHOUSE");
     console.log(deliveryPackage);
     await redis.addGeoData(coordinates, deliveryPackage.id);
     res.status(200).json({message: "Delivery Package Added", deliveryPackage});
