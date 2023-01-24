@@ -31,24 +31,27 @@ const getRouteDetails = catchAsync(async (req, res) => {
 
 const getRouteList = catchAsync(async (req, res) => {
     let query = {};
-    if (req.query.route_id) query._id = req.query.route_id;
-    else query.rider_id = req.query.rider_id;
+    if (req.query.rider_id) query.rider_id = req.query.rider_id;
 
     console.log({...query});
     let routeList = await Route.find({...query})
         .populate("paths")
         .lean();
 
-    routeList = routeList.map(routeItem => {
-        let ri = routeItem;
-        const groupedPackages = groupPackagesByLocation(routeItem.paths);
-        ri.route = groupedPackages;
-        ri.number_points = groupedPackages.length;
-        ri.number_packages = routeItem.paths.length;
-        delete ri.paths;
+    routeList = await Promise.all(
+        routeList.map(async routeItem => {
+            let ri = routeItem;
+            ri.rider = await Rider.findById(routeItem.rider_id);
+            const groupedPackages = groupPackagesByLocation(routeItem.paths);
+            ri.number_points = groupedPackages.length;
+            ri.number_packages = routeItem.paths.length;
 
-        return ri;
-    });
+            delete ri.paths;
+            delete ri.rider_id;
+
+            return ri;
+        })
+    );
 
     res.status(200).json({message: "Route list", routes: routeList});
 });
