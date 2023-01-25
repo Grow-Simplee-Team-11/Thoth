@@ -17,7 +17,7 @@ message Cluster{
 }
 
 message ResponsePackage{
-    string id=1;
+    int32 id=1;
     Position position=2;
 }
 
@@ -47,7 +47,7 @@ message Coordinate{
 }
 
 message Package{
-    string id=1;
+    int32 id=1;
     Dimension size=2;
     Coordinate coordinates=3;
     float weight=4;

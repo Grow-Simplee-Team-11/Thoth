@@ -8,7 +8,7 @@ const updateStatus = catchAsync(async (req, res) => {
     let {status, package_id, rider_id} = req.body;
     const pkg = await Package.findById(package_id);
 
-    if (status === "DELIVERED") {
+    if (status === "DELIVERED" || status === "PICKED") {
         const rider = JSON.parse(await redis.getRiderData(rider_id));
 
         const distance = haversineDistance(rider.coordinates, pkg.coordinates);
