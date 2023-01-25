@@ -100,7 +100,7 @@ const groupPackagesByLocation = packageList => {
     return groupedPackagesByLocation;
 };
 
-const createStatus = (package_id, status) => {
+const createStatus = (status, package_id) => {
     return Status.create({status, package_id});
 };
 

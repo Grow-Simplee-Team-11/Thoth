@@ -4,6 +4,9 @@ import {faker} from "@faker-js/faker";
 import fs from "fs";
 import config from "../config/config.js";
 import {createStatus, getCoordinatesFromAddress} from "../utils/utility.js";
+import Rider from "../models/rider.js";
+import {table} from "console";
+import Route from "../models/route.js";
 
 mongoose.set("strictQuery", false);
 
@@ -46,23 +49,38 @@ function writeDataToFile(data) {
     fs.appendFileSync("./tmp/dispatch.txt", JSON.stringify(data.status) + " " + JSON.stringify(data.data) + "\n");
 }
 
+let group = [];
+
 (async function main() {
-    parseCSV();
-    console.table(address);
     await mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
         console.log("Mongoose connected");
     });
-
-    for await (const ad of address) {
-        const data = await getCoordinatesFromAddress(ad);
-        writeDataToFile(data);
-        if (data.data != undefined && data.data.results.length > 0) {
-            const pkg = generateRandomData(ad, data.data.results[data.data.results.length - 1]?.geometry.location);
-            const dispatch = new Package(pkg);
-            const d = await dispatch.save();
-            await createStatus("IN_WAREHOUSE", dispatch.id);
-            console.log(d);
+    const riders = await Rider.find({}, "_id").lean();
+    const packages = await Package.find({}, "_id").lean();
+    let j = 0,
+        k = 0;
+    for await (const pkg of packages) {
+        if (j > 20) {
+            const route = await Route.create({rider_id: riders[k++]._id, paths: group});
+            console.log(route);
+            group = [];
+            j = 0;
         }
+        j++;
+        group.push(pkg._id);
     }
+    // console.table(address);
+
+    // for await (const ad of address) {
+    //     const data = await getCoordinatesFromAddress(ad);
+    //     writeDataToFile(data);
+    //     if (data.data != undefined && data.data.results.length > 0) {
+    //         const pkg = generateRandomData(ad, data.data.results[0]?.geometry.location);
+    //         const dispatch = new Package(pkg);
+    //         const d = await dispatch.save();
+    //         await createStatus("IN_WAREHOUSE", dispatch.id);
+    //         console.log(d);
+    //     }
+    // }
     await mongoose.disconnect();
 })();
