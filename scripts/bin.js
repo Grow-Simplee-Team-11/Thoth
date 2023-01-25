@@ -7,6 +7,7 @@ import {createStatus, getCoordinatesFromAddress} from "../utils/utility.js";
 import Rider from "../models/rider.js";
 import {table} from "console";
 import Route from "../models/route.js";
+import Bin from "../models/bin.js";
 
 mongoose.set("strictQuery", false);
 
@@ -55,32 +56,39 @@ let group = [];
     await mongoose.connect(config.mongoose.url, config.mongoose.options).then(async () => {
         console.log("Mongoose connected");
     });
-    const riders = await Rider.find({}, "_id").lean();
-    const packages = await Package.find({}, "_id").lean();
+    const routes = await Route.find({}, "_id paths").lean();
+    // const packages = await Package.find({}, "_id").lean();
     let j = 0,
         k = 0;
-    for await (const pkg of packages) {
-        if (j > 5) {
-            const route = await Route.create({rider_id: riders[k++]._id, paths: group});
-            console.log(route);
-            group = [];
-            j = 0;
+    for await (const route of routes) {
+        const pkgs = route.paths;
+        let binPkgs = [];
+        for await (const id of pkgs) {
+            const pkg = await Package.findById(id);
+            binPkgs.push({
+                package_id: pkg._id,
+                length: pkg.dimensions.length,
+                breadth: pkg.dimensions.breadth,
+                height: pkg.dimensions.height,
+                weight: pkg.dimensions.weight,
+                x: 0,
+                y: 0,
+                z: 10 * j++,
+            });
         }
-        j++;
-        group.push(pkg._id);
+        const bin = await Bin.create({
+            dimensions: {
+                length: 80,
+                breadth: 80,
+                height: 80,
+                weight: Math.floor(Math.random() * 29) + 1,
+            },
+            packages: binPkgs,
+        });
+        await Route.findByIdAndUpdate(route._id, {
+            bin_id: bin,
+        });
     }
-    // console.table(address);
 
-    // for await (const ad of address) {
-    //     const data = await getCoordinatesFromAddress(ad);
-    //     writeDataToFile(data);
-    //     if (data.data != undefined && data.data.results.length > 0) {
-    //         const pkg = generateRandomData(ad, data.data.results[0]?.geometry.location);
-    //         const dispatch = new Package(pkg);
-    //         const d = await dispatch.save();
-    //         await createStatus("IN_WAREHOUSE", dispatch.id);
-    //         console.log(d);
-    //     }
-    // }
     await mongoose.disconnect();
 })();

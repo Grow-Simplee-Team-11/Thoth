@@ -10,7 +10,7 @@ mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
 });
 
 let hi = [];
-for (let i = 1; i <= 15; i++) {
+for (let i = 1; i <= 40; i++) {
     const rider = new Rider({
         name: faker.name.fullName(),
         email: faker.internet.email(),

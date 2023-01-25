@@ -77,6 +77,10 @@ const getAllRiderData = () => {
     return getAllHashData("rider:data");
 };
 
+const getWarehouse = () => {
+    return getStringData("warehouse");
+};
+
 export default {
     getPickupId,
     setPickupData,
@@ -88,4 +92,5 @@ export default {
     updateRiderData,
     getRiderData,
     getAllRiderData,
+    getWarehouse,
 };

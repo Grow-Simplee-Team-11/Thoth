@@ -3,6 +3,7 @@ import Rider from "../models/rider.js";
 import Package from "../models/package.js";
 import Route from "../models/route.js";
 import {groupPackagesByLocation} from "../utils/utility.js";
+import redis from "../database/redis.js";
 
 const addRoute = catchAsync(async (req, res) => {
     const {rider_id, paths} = req.body;
@@ -20,10 +21,13 @@ const getRouteDetails = catchAsync(async (req, res) => {
     const numberOfGroups = groupedPackages.length;
     const numberOfPackages = route.paths.length;
 
+    const warehouse = JSON.parse(await redis.getWarehouse());
+
     res.status(200).json({
         message: "Route Details",
-        rider: rider,
+        rider,
         route: groupedPackages,
+        warehouse,
         number_points: numberOfGroups,
         number_packages: numberOfPackages,
     });
