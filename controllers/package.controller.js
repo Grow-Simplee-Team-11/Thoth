@@ -4,6 +4,7 @@ import Status from "../models/status.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
 import {getCoordinatesFromAddress, createStatus} from "../utils/utility.js";
+import rabbit from "../utils/rabbitmq.js";
 
 // const createItem = async (name, dimensions) => {
 //     const item = await Item.findOne({name});
@@ -72,10 +73,43 @@ const uploadImageController = catchAsync(async (req, res) => {
     res.status(200).json({message: "Image uploaded", pkg});
 });
 
+const addDynamicPackage = catchAsync(async (req, res) => {
+    const {address, deliver_to, awb_id, sku_id} = req.body;
+    const {data} = await getCoordinatesFromAddress(address);
+    const coordinates = {
+        latitude: data.results[data.results.length - 1].geometry.location.lat,
+        longitude: data.results[data.results.length - 1].geometry.location.lng,
+        address,
+    };
+
+    const deliveryPackage = await Package.create({
+        awb_id,
+        sku_id,
+        deliver_to: {
+            name: deliver_to.name,
+            phone_number: deliver_to.phone_number,
+        },
+        coordinates: {
+            latitude: Math.floor(coordinates.latitude * config.scalingFactor),
+            longitude: Math.floor(coordinates.longitude * config.scalingFactor),
+            address,
+        },
+        type: "PICKUP",
+        status: "DELIVERED",
+    });
+
+    await createStatus("DELIVERED", deliveryPackage.id);
+
+    const channel = rabbit.getChannel();
+    channel.sendToQueue("dynamic", Buffer.from(JSON.stringify({message: deliveryPackage})));
+    res.status(200).json({message: "Dynamic point added"});
+});
+
 export default {
     getCoordinatesFromAddress,
     addDeliveryPackage,
     getPackageDetails,
     getPackageList,
     uploadImageController,
+    addDynamicPackage,
 };

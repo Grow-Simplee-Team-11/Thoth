@@ -7,5 +7,6 @@ router.post("/delivery", controllers.addDeliveryPackage);
 router.get("/details", controllers.getPackageDetails);
 router.get("/list", controllers.getPackageList);
 router.post("/upload_image", uploadImage.single("image"), controllers.uploadImageController);
+router.post("/pickup", controllers.addDynamicPackage);
 
 export default router;
