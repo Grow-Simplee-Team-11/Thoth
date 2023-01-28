@@ -47,7 +47,7 @@ const addDeliveryPackage = catchAsync(async (req, res) => {
         },
         type,
     });
-    await createStatus(deliveryPackage._id, "IN_WAREHOUSE");
+    await createStatus("IN_WAREHOUSE", deliveryPackage._id);
     console.log(deliveryPackage);
     await redis.addGeoData(coordinates, deliveryPackage.id);
     res.status(200).json({message: "Delivery Package Added", deliveryPackage});

@@ -42,7 +42,7 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
                             await addDropLocation(rowObject);
                         })
                     );
-                    res.status(200).json({message: "Hi world"});
+                    res.status(200).json({message: "Packages created"});
                 });
             return;
         } catch (err) {

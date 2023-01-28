@@ -4,6 +4,7 @@ import Status from "../models/status.js";
 import Package from "../models/package.js";
 import {setTimeout} from "timers/promises";
 import {faker} from "@faker-js/faker";
+import redis from "../database/redis.js";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -119,8 +120,13 @@ const addDropLocation = async row => {
             address: row[0],
         };
 
-        const p = new Package({
-            status: "CREATED",
+        const redisCoordinates = {
+            latitude: data.results[0]?.geometry.location.lat,
+            longitude: data.results[0]?.geometry.location.lng,
+        };
+
+        const pkg = await Package.create({
+            status: "IN_WAREHOUSE",
             awb_id: faker.datatype.uuid(),
             deliver_to: {name: row[3], phone_number: row[2]},
             sku_id: row[4],
@@ -134,11 +140,9 @@ const addDropLocation = async row => {
                 weight: Math.random() * 20 + 5,
             },
         });
-
-        return p.save(err => {
-            if (err) console.log(err);
-            console.log(`Row ${row[3]} saved`);
-        });
+        console.log(`Row ${row[3]} saved`);
+        await redis.addGeoData(redisCoordinates, pkg.id);
+        await createStatus("IN_WAREHOUSE", pkg._id);
     }
 };
 
