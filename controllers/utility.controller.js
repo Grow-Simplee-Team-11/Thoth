@@ -5,6 +5,7 @@ import {calculateErrorfromPackage} from "../utils/utility.js";
 import ApiError from "../utils/ApiError.js";
 import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
+import {addDropLocation} from "../utils/utility.js";
 
 const calculateError = catchAsync(async (req, res) => {
     const {sku_id} = req.query;
@@ -19,15 +20,14 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
     form.multiples = true;
     form.parse(req, async function (error, fields, files) {
         try {
-            console.log(files);
             if (!files || !files.csv) {
-                throw new ApiError(500, "File not sent");
+                res.status(500).json({message: "File not sent"});
             }
 
             const readStream = fs.createReadStream(files.csv.filepath);
             let rows = [];
 
-            const csvParserStream = parseStream(readStream, {headers: true})
+            const csvParserStream = parseStream(readStream, {headers: false})
                 .on("error", err => {
                     throw new ApiError(500, err);
                 })
@@ -36,8 +36,12 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
                     csvParserStream.end();
                     readStream.close();
                 })
-                .on("end", () => {
-                    console.log(rows);
+                .on("end", async () => {
+                    await Promise.all(
+                        rows.map(async rowObject => {
+                            await addDropLocation(rowObject);
+                        })
+                    );
                     res.status(200).json({message: "Hi world"});
                 });
             return;
