@@ -115,8 +115,8 @@ const addDropLocation = async row => {
 
     if (data != undefined && data.results.length > 0) {
         const coordinates = {
-            latitude: data.results[0]?.geometry.location.lat * config.scalingFactor,
-            longitude: data.results[0]?.geometry.location.lng * config.scalingFactor,
+            latitude: ~~(data.results[0]?.geometry.location.lat * config.scalingFactor),
+            longitude: ~~(data.results[0]?.geometry.location.lng * config.scalingFactor),
             address: row[0],
         };
 
