@@ -47,6 +47,7 @@ const getRouteList = catchAsync(async (req, res) => {
             let ri = routeItem;
             ri.rider = await Rider.findById(routeItem.rider_id);
             const groupedPackages = groupPackagesByLocation(routeItem.paths);
+            ri.route = groupedPackages;
             ri.number_points = groupedPackages.length;
             ri.number_packages = routeItem.paths.length;
 
