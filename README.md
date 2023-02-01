@@ -141,6 +141,7 @@ POST /rider/add
 
 <details>
 <summary>Response</summary>
+<pre>
 {
     "message": "Rider Added",
     "rider": {
@@ -153,6 +154,7 @@ POST /rider/add
         "__v": 0
     }
 }
+</pre>
 </details>
 
 - #### Get Rider Location
