@@ -21,8 +21,8 @@ yarn dev
 - [Bin endpoints](#bin)
 - [Route endpoints](#route)
 - [Status endpoints](#status)
-- [Utility endpoints](#login)
-- [Service endpoints](#login)
+- [Utility endpoints](#utility)
+- [Service endpoints](#service)
 
 ### Login
 
@@ -756,6 +756,40 @@ Endpoint for populating the database using csv file containing package list
 ```shell
 POST /util/csv/package
 ```
+
+### Service
+
+- #### Start Optimizer
+
+Endpoint for starting the optimizer service
+
+```shell
+GET /service/start
+```
+
+- #### Start Dynamic Pickup
+
+Endpoint for adding a pickup package and starting the dynamic pickup service
+
+```shell
+POST /service/dynamic
+```
+
+<details>
+<summary>Request Body</summary>
+<pre>
+{
+    "awb_id": "DEF",
+    "sku_id": "SKU_1",
+    "pickup_from": {
+        "name": "PQR",
+        "phone_number": "9876543210"
+    },
+    "address": "1260, SY 35/4, SJR Tower's, 7th Phase, 24th Main, Puttanhalli, JP Nagar, Bangalore",
+    "type":"PICKUP"
+}
+</pre>
+</details>
 
 <!--
 To generate the .pb.go file for go using protoc from the root Directory:

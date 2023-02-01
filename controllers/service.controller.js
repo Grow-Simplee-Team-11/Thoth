@@ -7,4 +7,11 @@ const startOptimiser = catchAsync(async (req, res) => {
     res.status(200).json({message: "Optimiser Started"});
 });
 
-export default {startOptimiser};
+const startDynamicPickup = catchAsync(async (req, res) => {
+    const pkg = req.body;
+    const channel = rabbit.getChannel();
+    channel.sendToQueue("dynamic", Buffer.from(JSON.stringify({message: "Dynamic Pickup", pkg})));
+    res.status(200).json({message: "Dynamic Pickup Started"});
+});
+
+export default {startOptimiser, startDynamicPickup};
