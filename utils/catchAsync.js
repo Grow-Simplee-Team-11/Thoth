@@ -3,4 +3,3 @@ const catchAsync = fn => (req, res, next) => {
 };
 
 export default catchAsync;
-    

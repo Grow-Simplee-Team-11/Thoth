@@ -1,14 +1,27 @@
-FROM node:18-alpine
+FROM node:16.19.0-alpine3.16 AS BUILD_IMAGE
 
-WORKDIR /thoth
+ENV YARN_VERSION 1.22.18
 
-COPY package.json .
-COPY yarn.lock .
+RUN yarn policies set-version $YARN_VERSION
 
-RUN yarn install
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock ./
+
+# install dependencies
+RUN yarn && yarn cache clean
 
 COPY . .
 
-EXPOSE 3000
+FROM node:16.19.0-alpine3.16
 
-CMD [ "yarn", "dev" ]
+WORKDIR /usr/src/app
+ENV YARN_VERSION 1.22.18
+
+RUN yarn policies set-version $YARN_VERSION
+
+ENV NODE_ENV production
+COPY --from=BUILD_IMAGE /usr/src/app/ ./
+
+EXPOSE 3000
+CMD [ "npx","pm2-runtime","server.js","-i","4"]

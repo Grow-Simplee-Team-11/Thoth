@@ -14,4 +14,4 @@ const createDynamicRequest = (pickup, hub) => {
     };
 };
 
-export   default createDynamicRequest;
+export default createDynamicRequest;
