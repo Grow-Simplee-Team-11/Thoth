@@ -4,6 +4,6 @@ import controllers from "../controllers/status.controller.js";
 const router = express.Router();
 
 router.post("/update", controllers.updateStatus);
-// router.post("/undeliver", controllers.)
+router.patch("/unmark", controllers.unmarkStatus);
 
 export default router;

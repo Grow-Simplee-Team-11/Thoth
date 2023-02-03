@@ -29,4 +29,12 @@ const updateStatus = catchAsync(async (req, res) => {
     res.status(201).json({message: "Status Updated", statusItem});
 });
 
-export default {updateStatus};
+const unmarkStatus = catchAsync(async (req, res) => {
+    const {package_id} = req.body;
+    const status = await Status.find({package_id}).sort({createdAt: -1}).limit(2);
+    await Status.findByIdAndDelete(status[0]._id);
+    const pkg = await Package.findByIdAndUpdate(package_id, {latest_status: status[1].status}, {returnDocument: "after"});
+    res.status(200).json({message: "Status Unmarked", pkg});
+});
+
+export default {updateStatus, unmarkStatus};
