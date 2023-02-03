@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  web:
+    container_name: thoth
+    build: .
+    restart: always
+    networks:
+      - interiit_main_network
+  
+networks:
+  interiit_main_network:
+    external: true
