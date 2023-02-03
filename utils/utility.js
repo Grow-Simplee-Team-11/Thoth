@@ -36,7 +36,7 @@ const haversineDistance = (riderCoordinates, pkgCoordinates) => {
 };
 
 const getCoordinatesFromAddress = async address => {
-    await setTimeout(25);
+    await setTimeout(50);
     const data = await axios.get(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${config.googleApiKey}`
     );

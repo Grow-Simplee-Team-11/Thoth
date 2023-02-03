@@ -6,7 +6,6 @@ import ApiError from "../utils/ApiError.js";
 import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
 import {addDropLocation} from "../utils/utility.js";
-import rabbit from "../utils/rabbitmq.js";
 
 const calculateError = catchAsync(async (req, res) => {
     const {sku_id} = req.query;
@@ -43,9 +42,6 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
                             await addDropLocation(rowObject);
                         })
                     );
-
-                    const channel = rabbit.getChannel();
-                    channel.sendToQueue("grpc", Buffer.from(JSON.stringify({message: "Optimiser"})));
                     res.status(200).json({message: "Packages created"});
                 });
             return;
