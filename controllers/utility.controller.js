@@ -50,4 +50,10 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
         }
     });
 });
-export {calculateError, uploadDeliveryFiles};
+
+const downloadGeoJSON = catchAsync(async (req, res) => {
+    const fileLocation = "./tmp/geojson.json";
+    const fileName = req.params.file;
+    res.download(fileLocation, fileName);
+});
+export {calculateError, uploadDeliveryFiles, downloadGeoJSON};
