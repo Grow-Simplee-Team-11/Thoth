@@ -1,3 +1,5 @@
+
+
 FROM node:16.19.0-alpine3.16 AS BUILD_IMAGE
 
 ENV YARN_VERSION 1.22.18
@@ -16,12 +18,9 @@ COPY . .
 FROM node:16.19.0-alpine3.16
 
 WORKDIR /usr/src/app
-ENV YARN_VERSION 1.22.18
-
-RUN yarn policies set-version $YARN_VERSION
 
 ENV NODE_ENV production
 COPY --from=BUILD_IMAGE /usr/src/app/ ./
 
 EXPOSE 3000
-CMD [ "npx","pm2-runtime","server.js","-i","4"]
+CMD [ "node","server.js"]
