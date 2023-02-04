@@ -4,9 +4,7 @@ services:
     container_name: thoth
     build: .
     restart: always
-    networks:
-      - interiit_main_network
-  
-networks:
-  interiit_main_network:
-    external: true
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
