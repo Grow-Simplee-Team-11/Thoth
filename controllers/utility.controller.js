@@ -1,5 +1,6 @@
 import formidable from "formidable";
 import Package from "../models/package.js";
+import Route from "../models/route.js";
 import catchAsync from "../utils/catchAsync.js";
 import {calculateErrorfromPackage} from "../utils/utility.js";
 import ApiError from "../utils/ApiError.js";
@@ -53,7 +54,39 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
 
 const downloadGeoJSON = catchAsync(async (req, res) => {
     const fileLocation = "./tmp/geojson.json";
-    const fileName = req.params.file;
-    res.download(fileLocation, fileName);
+    const routeList = await Route.find({}).lean();
+    const geoJSON = {
+        type: "FeatureCollection",
+        features: [],
+    };
+
+    console.log(routeList);
+
+    for await (const route of routeList) {
+        const pkgList = await Package.find({_id: {$in: route.paths}}, "coordinates").lean();
+        const featureLine = {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              coordinates: [],
+              type: "LineString"
+            },
+        };
+        for (const pkg of pkgList) {
+            featureLine.geometry.coordinates.push([pkg.coordinates.longitude, pkg.coordinates.latitude]);
+        }
+        geoJSON.features.push(featureLine);
+    }
+
+    fs.writeFile("./tmp/geojson.json", JSON.stringify(geoJSON), err => {
+        if (err) {
+          throw err
+        }
+        console.log("JSON data saved")
+        res.download(fileLocation, function(err) {
+            console.log(err);
+        });
+    });
+
 });
 export {calculateError, uploadDeliveryFiles, downloadGeoJSON};

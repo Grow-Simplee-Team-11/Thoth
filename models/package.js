@@ -23,6 +23,7 @@ const packageSchema = new Schema(
         delivered_time: {type: Date},
         type: {type: String, enum: ["DELIVERY", "PICKUP"]},
         latest_status: {type: String, default: "IN_WAREHOUSE"},
+        threat: {type: Number, default: 0},
     },
     {timestamps: true}
 );
