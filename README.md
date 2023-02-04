@@ -4,8 +4,6 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 ## Installing / Getting started
 
-
-
 A quick introduction of the minimal setup you need to get the development environment setup
 
 ## Requirements
@@ -17,9 +15,20 @@ yarn
 yarn dev
 ```
 
+Docker can also be used to start the server.
+
+```shell
+# To start the Server
+docker compose up --build -d
+# To stop the server 
+docker compose down --remove-orphans
+```
+
 ## API reference
 
 `baseurl`: http://127.0.0.1:3000/v1
+
+`Production Url`: https://thoth.grow-simplee.tech 
 
 - [Login endpoints](#login)
 - [Rider endpoints](#rider)
