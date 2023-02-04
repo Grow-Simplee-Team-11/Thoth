@@ -5,19 +5,8 @@ const statusSchema = new Schema(
     {
         status: {
             type: String,
-            enum: [
-                "IN_WAREHOUSE",
-                "IN_SCAN",
-                "TAMPER_CHECK",
-                "BIN_PACKING",
-                "ROUTE_ASSIGNMENT",
-                "DRIVER_ASSIGNMENT",
-                "OUT_FOR_DELIVERY",
-                "DELIVERED",
-                "PICKED",
-                "FAKE_ATTEMPT",
-            ],
-            default: "IN_WAREHOUSE",
+            enum: ["IN WAREHOUSE", "SCANNING", "FORMING CLUSTER", "RIDER ASSIGNED", "PICKED", "DELIVERED"],
+            default: "IN WAREHOUSE",
         },
         package_id: {type: Schema.Types.ObjectId, ref: "Package"},
     },
