@@ -8,10 +8,10 @@ A quick introduction of the minimal setup you need to get the development enviro
 
 ## Requirements
 
-- Node >= 16
+-   Node >= 16
 
 ```shell
-yarn 
+yarn
 yarn dev
 ```
 
@@ -20,7 +20,7 @@ Docker can also be used to start the server.
 ```shell
 # To start the Server
 docker compose up --build -d
-# To stop the server 
+# To stop the server
 docker compose down --remove-orphans
 ```
 
@@ -28,20 +28,20 @@ docker compose down --remove-orphans
 
 `baseurl`: http://127.0.0.1:3000/v1
 
-`Production Url`: https://thoth.grow-simplee.tech 
+`Production Url`: https://thoth.grow-simplee.tech
 
-- [Login endpoints](#login)
-- [Rider endpoints](#rider)
-- [Package endpoints](#package)
-- [Bin endpoints](#bin)
-- [Route endpoints](#route)
-- [Status endpoints](#status)
-- [Utility endpoints](#utility)
-- [Service endpoints](#service)
+-   [Login endpoints](#login)
+-   [Rider endpoints](#rider)
+-   [Package endpoints](#package)
+-   [Bin endpoints](#bin)
+-   [Route endpoints](#route)
+-   [Status endpoints](#status)
+-   [Utility endpoints](#utility)
+-   [Service endpoints](#service)
 
 ### Login
 
-- #### Admin Login
+-   #### Admin Login
 
 Endpoint for admin login
 
@@ -68,7 +68,7 @@ POST /auth/admin
 </pre>
 </details>
 
-- #### Rider Login
+-   #### Rider Login
 
 Endpoint for rider login
 
@@ -106,7 +106,7 @@ POST /auth/rider
 
 ### Rider
 
-- #### Get All Riders
+-   #### Get All Riders
 
 Endpoint for getting list of all riders
 
@@ -135,7 +135,7 @@ GET /rider/all
 </pre>
 </details>
 
-- #### Add Rider
+-   #### Add Rider
 
 Endpoint for adding a new rider to the database
 
@@ -172,7 +172,7 @@ POST /rider/add
 </pre>
 </details>
 
-- #### Get Rider Location
+-   #### Get Rider Location
 
 Endpoint for getting rider's last known location (locations are being stored in redis geohashes)  
 Returns all rider locations if no `rider_id` is found in query
@@ -226,7 +226,7 @@ GET /rider/location
 </pre>
 </details>
 
-- #### Set Rider Location
+-   #### Set Rider Location
 
 Endpoint for setting rider's location (pass scaled coordinates)
 
@@ -266,7 +266,7 @@ POST /rider/location
 
 ### Package
 
-- #### Get Package Details
+-   #### Get Package Details
 
 Endpoint for getting package details from `package_id`
 
@@ -316,7 +316,7 @@ GET /package/details?package_id=63d1285d70bb48a2ca4ec16b
 </pre>
 </details>
 
-- #### Get Package List
+-   #### Get Package List
 
 Endpoint for getting package list from a given `sku_id` or `awb_id`  
 Returns list of all packages if nothing is passed in query
@@ -365,7 +365,7 @@ GET /package/list
 </pre>
 </details>
 
-- #### Add Delivery Package
+-   #### Add Delivery Package
 
 Endpoint for adding a delivery package
 
@@ -422,13 +422,13 @@ POST /package/delivery
 </pre>
 </details>
 
-- #### Upload image
+-   #### Upload image
 
 Endpoint for uploading package image and updating `image_url` in a package
 
 ### Bin
 
-- #### Get Bin Details
+-   #### Get Bin Details
 
 Endpoint for getting bin details from `rider_id` (if rider is assigned)
 
@@ -516,7 +516,7 @@ GET /bin/details?rider_id=63c717fee9c8bd67b877e46f
 
 ### Route
 
-- #### Get Route Details
+-   #### Get Route Details
 
 Endpoint for getting route details from `route_id`  
 Returns route information with all the packages grouped by coordinates
@@ -619,7 +619,7 @@ GET /route/details?route_id=63c6b3dae80dbf8d9bfcbdac
 </pre>
 </details>
 
-- #### Get Route List
+-   #### Get Route List
 
 Endpoint for getting route details without packages from `route_id` or `rider_id`  
 Returns all routes **without** packages if nothing is passed in query
@@ -659,7 +659,7 @@ GET /route/list?route_id=63c6b3dae80dbf8d9bfcbdac
 </pre>
 </details>
 
-- #### Assign Rider to Route
+-   #### Assign Rider to Route
 
 Endpoint for updating rider associated with a particular route
 
@@ -688,10 +688,14 @@ PATCH /route/update_rider
 
 ### Status
 
-- #### Update Status
+-   #### Update Status
 
 Endpoint for updating status associated with a particular package  
-Status can take the following values: `IN_WAREHOUSE`, `IN_SCAN`, `TAMPER_CHECK`,`BIN_PACKING`, `ROUTE_ASSIGNMENT`, `DRIVER_ASSIGNMENT`, `OUT_FOR_DELIVERY`,`DELIVERED`, `PICKED`, `FAKE_ATTEMPT`, When a status of "DELIVERED or PICKED" is given, a check for fake attempt is done where the riders location and package's delivery position is used to calculate the distance, and if that is greater than 200m , then it is said to be a fake delivery attempt.
+Status can take the following values: `IN_WAREHOUSE`, `IN_SCAN`, `TAMPER_CHECK`,`BIN_PACKING`, `ROUTE_ASSIGNMENT`, `DRIVER_ASSIGNMENT`, `OUT_FOR_DELIVERY`,`DELIVERED`, `PICKED`, `FAKE_ATTEMPT`,
+
+### Fake Attempt Check
+
+When a status of "DELIVERED or PICKED" is given, a check for fake attempt is done where the riders location and package's delivery position is used to calculate the distance, and if that is greater than 200m , then it is said to be a fake delivery attempt. For this, rider's location (which gets cached regularly from mobile's gps in redis) is fetched and haversine distance between package and riders coordinates is calculated. This distance being more than 200m means FAKE ATTEMPT
 
 ```shell
 POST /status/update
@@ -727,9 +731,9 @@ POST /status/update
 
 ### Utility
 
-- #### Get Error
+-   #### Get Error
 
-Endpoint for getting error values associated with the packages with given `sku_id`  
+Endpoint for getting error values associated with the packages with given `sku_id`
 
 ```shell
 GET /util/error?sku_id=SKU_1
@@ -766,9 +770,9 @@ GET /util/error?sku_id=SKU_1
 </pre>
 </details>
 
-- #### Upload CSV Package List
+-   #### Upload CSV Package List
 
-Endpoint for populating the database using csv file containing package list. 
+Endpoint for populating the database using csv file containing package list.
 
 ```shell
 POST /util/csv/package
@@ -776,7 +780,7 @@ POST /util/csv/package
 
 ### Service
 
-- #### Start Optimizer
+-   #### Start Optimizer
 
 Endpoint for starting the optimizer service. it sends a request to the rabbitmq channel which iniitiates a grpc call to the server asyncronously.
 
@@ -784,7 +788,7 @@ Endpoint for starting the optimizer service. it sends a request to the rabbitmq 
 GET /service/start
 ```
 
-- #### Start Dynamic Pickup
+-   #### Start Dynamic Pickup
 
 Endpoint for adding a pickup package and starting the dynamic pickup service
 
@@ -898,9 +902,6 @@ struct CVRPResponse{
     paths           Path[]
 }
 ``` -->
-
-
-
 
 <!-- - awb_id - unique product  , sku_id - item
 - length weight height breadth - errorenous
