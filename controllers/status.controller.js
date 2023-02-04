@@ -14,7 +14,7 @@ const updateStatus = catchAsync(async (req, res) => {
         const distance = haversineDistance(rider.coordinates, pkg.coordinates);
         console.log(distance);
         if (distance >= 0.2) {
-            status = "FAKE_ATTEMPT";
+            status = "FAKE ATTEMPT";
         }
     }
 
