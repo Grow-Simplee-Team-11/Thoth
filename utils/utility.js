@@ -5,6 +5,7 @@ import Package from "../models/package.js";
 import {setTimeout} from "timers/promises";
 import {faker} from "@faker-js/faker";
 import redis from "../database/redis.js";
+import KNN from "ml-knn";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -150,6 +151,28 @@ const createStatus = (status, package_id) => {
     return Status.create({status, package_id});
 };
 
+const checkError = async (length, breadth, height, weight, sku_id) => {
+    const packages = await Package.find({sku_id: sku_id}, {dimensions: 1, _id: 0});
+    const array = [];
+    if (packages.length < 3) return "false";
+    for (const pkg of packages) {
+        array.push([pkg.dimensions.length, pkg.dimensions.breadth, pkg.dimensions.height, pkg.dimensions.weight]);
+    }
+
+    const train = [];
+    for (let i = 0; i < array.length - 1; i++) {
+        train.push(0);
+    }
+    train.push(1);
+    console.log(array, train);
+    let knn = new KNN(array, train, {k: 3});
+
+    const test_dataset = [[Number(length), Number(breadth), Number(height), Number(weight)]];
+    console.log(test_dataset);
+    let result = knn.predict(test_dataset);
+    return result[0] === 1 ? "Erroneous" : "Not Errorneous";
+};
+
 export {
     RandomRange,
     getCoordinatesFromAddress,
@@ -158,4 +181,5 @@ export {
     haversineDistance,
     createStatus,
     addDropLocation,
+    checkError,
 };

@@ -3,7 +3,7 @@ import Package from "../models/package.js";
 import Status from "../models/status.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
-import {getCoordinatesFromAddress, createStatus} from "../utils/utility.js";
+import {getCoordinatesFromAddress, createStatus, checkError} from "../utils/utility.js";
 import rabbit from "../utils/rabbitmq.js";
 
 // const createItem = async (name, dimensions) => {
@@ -68,7 +68,10 @@ const getPackageList = catchAsync(async (req, res) => {
 
 const uploadImageController = catchAsync(async (req, res) => {
     const {awb_id} = req.query;
-    const {length, breadth, height, weight, skuid} = req.body;
+    const {length, breadth, height, weight, sku_id} = req.body;
+    const error = await checkError(length, breadth, height, weight, sku_id);
+    if (error == "false") console.log("Less Packages");
+    else console.log(error);
     const fileName = req.file.location;
     const pkg = await Package.findOneAndUpdate(
         {awb_id},
