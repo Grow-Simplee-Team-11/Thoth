@@ -4,7 +4,13 @@ Why this name: The Egyptian God of Messeges. The server acts as a messenger betw
 
 ## Installing / Getting started
 
+
+
 A quick introduction of the minimal setup you need to get the development environment setup
+
+## Requirements
+
+- Node >= 16
 
 ```shell
 yarn 
@@ -676,7 +682,7 @@ PATCH /route/update_rider
 - #### Update Status
 
 Endpoint for updating status associated with a particular package  
-Status can take the following values: `IN_WAREHOUSE`, `IN_SCAN`, `TAMPER_CHECK`,`BIN_PACKING`, `ROUTE_ASSIGNMENT`, `DRIVER_ASSIGNMENT`, `OUT_FOR_DELIVERY`,`DELIVERED`, `PICKED`, `FAKE_ATTEMPT`,
+Status can take the following values: `IN_WAREHOUSE`, `IN_SCAN`, `TAMPER_CHECK`,`BIN_PACKING`, `ROUTE_ASSIGNMENT`, `DRIVER_ASSIGNMENT`, `OUT_FOR_DELIVERY`,`DELIVERED`, `PICKED`, `FAKE_ATTEMPT`, When a status of "DELIVERED or PICKED" is given, a check for fake attempt is done where the riders location and package's delivery position is used to calculate the distance, and if that is greater than 200m , then it is said to be a fake delivery attempt.
 
 ```shell
 POST /status/update
@@ -753,7 +759,7 @@ GET /util/error?sku_id=SKU_1
 
 - #### Upload CSV Package List
 
-Endpoint for populating the database using csv file containing package list
+Endpoint for populating the database using csv file containing package list. 
 
 ```shell
 POST /util/csv/package
@@ -763,7 +769,7 @@ POST /util/csv/package
 
 - #### Start Optimizer
 
-Endpoint for starting the optimizer service
+Endpoint for starting the optimizer service. it sends a request to the rabbitmq channel which iniitiates a grpc call to the server asyncronously.
 
 ```shell
 GET /service/start

@@ -5,7 +5,15 @@ const statusSchema = new Schema(
     {
         status: {
             type: String,
-            enum: ["IN WAREHOUSE", "SCANNING", "FORMING CLUSTER", "RIDER ASSIGNED", "PICKED", "DELIVERED"],
+            enum: [
+                "IN WAREHOUSE",
+                "SCANNING",
+                "FORMING CLUSTER",
+                "RIDER ASSIGNED",
+                "PICKED",
+                "DELIVERED",
+                "FAKE ATTEMPT",
+            ],
             default: "IN WAREHOUSE",
         },
         package_id: {type: Schema.Types.ObjectId, ref: "Package", index: true},
