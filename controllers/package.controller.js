@@ -68,8 +68,14 @@ const getPackageList = catchAsync(async (req, res) => {
 
 const uploadImageController = catchAsync(async (req, res) => {
     const {awb_id} = req.query;
+    const {length, breadth, height, weight, skuid} = req.body;
     const fileName = req.file.location;
-    const pkg = await Package.findOneAndUpdate({awb_id}, {image_url: fileName}, {returnDocument: "after"});
+    const pkg = await Package.findOneAndUpdate(
+        {awb_id},
+        {image_url: fileName, dimensions: {length, breadth, height, weight}},
+        {returnDocument: "after"}
+    );
+
     res.status(200).json({message: "Image uploaded", pkg});
 });
 
