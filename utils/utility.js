@@ -126,7 +126,7 @@ const addDropLocation = async row => {
         };
 
         const pkg = await Package.create({
-            status: "IN_WAREHOUSE",
+            status: "IN WAREHOUSE",
             awb_id: faker.datatype.uuid(),
             deliver_to: {name: row[3], phone_number: row[2]},
             sku_id: row[4],
@@ -142,7 +142,7 @@ const addDropLocation = async row => {
         });
         console.log(`Row ${row[3]} saved`);
         await redis.addGeoData(redisCoordinates, pkg.id);
-        await createStatus("IN_WAREHOUSE", pkg._id);
+        await createStatus("IN WAREHOUSE", pkg._id);
     }
 };
 
