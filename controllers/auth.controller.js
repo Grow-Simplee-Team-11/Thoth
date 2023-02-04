@@ -16,7 +16,7 @@ const loginRider = catchAsync(async (req, res) => {
     const rider = await Rider.findOne({email});
     console.log(rider);
     if (!rider) {
-        throw new ApiError(500, "No rider wih such email found");
+        throw new ApiError(500, "No rider with such email found");
     }
 
     if (password != config.auth.rider.password) throw new ApiError(500, "Invalid Pasword");
