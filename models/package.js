@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 const packageSchema = new Schema(
     {
         image_url: {type: String},
-        sku_id: {type: String},
-        awb_id: {type: String},
+        sku_id: {type: String, index: true},
+        awb_id: {type: String, index: true},
 
         deliver_to: {name: {type: String}, phone_number: {type: String}},
 

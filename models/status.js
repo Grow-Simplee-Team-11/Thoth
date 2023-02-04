@@ -8,7 +8,7 @@ const statusSchema = new Schema(
             enum: ["IN WAREHOUSE", "SCANNING", "FORMING CLUSTER", "RIDER ASSIGNED", "PICKED", "DELIVERED"],
             default: "IN WAREHOUSE",
         },
-        package_id: {type: Schema.Types.ObjectId, ref: "Package"},
+        package_id: {type: Schema.Types.ObjectId, ref: "Package", index: true},
     },
     {timestamps: true}
 );
