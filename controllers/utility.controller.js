@@ -29,7 +29,7 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
 
             const csvParserStream = parseStream(readStream, {headers: false})
                 .on("error", err => {
-                    throw new ApiError(500, err);
+                    res.status(500).json({message: "Error in parsing csv file"});
                 })
                 .on("data", row => {
                     rows.push(row);
@@ -37,16 +37,16 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
                     readStream.close();
                 })
                 .on("end", async () => {
-                    await Promise.all(
-                        rows.map(async rowObject => {
-                            await addDropLocation(rowObject);
-                        })
-                    );
+                    for await (const row of rows) {
+                        console.log(new Date());
+                        await addDropLocation(row);
+                    }
                     res.status(200).json({message: "Packages created"});
                 });
             return;
         } catch (err) {
-            throw new ApiError(500, err);
+            console.log(err);
+            res.status(500).json({message: "Error in parsing csv file"});
         }
     });
 });

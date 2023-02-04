@@ -8,7 +8,7 @@ RUN yarn policies set-version $YARN_VERSION
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY package.json ./
 
 # install dependencies
 RUN yarn && yarn cache clean
