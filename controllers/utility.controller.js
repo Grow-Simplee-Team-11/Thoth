@@ -3,10 +3,10 @@ import Package from "../models/package.js";
 import Route from "../models/route.js";
 import catchAsync from "../utils/catchAsync.js";
 import {calculateErrorfromPackage} from "../utils/utility.js";
-import ApiError from "../utils/ApiError.js";
 import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
 import {addDropLocation} from "../utils/utility.js";
+import config from "../config/config.js";
 
 const calculateError = catchAsync(async (req, res) => {
     const {sku_id} = req.query;
@@ -68,25 +68,27 @@ const downloadGeoJSON = catchAsync(async (req, res) => {
             type: "Feature",
             properties: {},
             geometry: {
-              coordinates: [],
-              type: "LineString"
+                coordinates: [],
+                type: "LineString",
             },
         };
         for (const pkg of pkgList) {
-            featureLine.geometry.coordinates.push([pkg.coordinates.longitude, pkg.coordinates.latitude]);
+            featureLine.geometry.coordinates.push([
+                pkg.coordinates.longitude / parseFloat(config.scalingFactor),
+                pkg.coordinates.latitude / parseFloat(config.scalingFactor),
+            ]);
         }
         geoJSON.features.push(featureLine);
     }
 
     fs.writeFile("./tmp/geojson.json", JSON.stringify(geoJSON), err => {
         if (err) {
-          throw err
+            throw err;
         }
-        console.log("JSON data saved")
-        res.download(fileLocation, function(err) {
+        console.log("JSON data saved");
+        res.download(fileLocation, function (err) {
             console.log(err);
         });
     });
-
 });
 export {calculateError, uploadDeliveryFiles, downloadGeoJSON};
