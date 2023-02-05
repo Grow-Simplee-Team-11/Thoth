@@ -7,5 +7,6 @@ router.get("/details", controllers.getRouteDetails);
 router.post("/add", controllers.addRoute);
 router.get("/list", controllers.getRouteList);
 router.patch("/update_rider", controllers.updateRider);
+router.patch("/update", controllers.updateRoute);
 
 export default router;

@@ -1,6 +1,7 @@
 import catchAsync from "../utils/catchAsync.js";
 import Rider from "../models/rider.js";
 import Package from "../models/package.js";
+import Notif from "../models/notifs.js";
 import Route from "../models/route.js";
 import {groupPackagesByLocation} from "../utils/utility.js";
 import redis from "../database/redis.js";
@@ -71,4 +72,17 @@ const updateRider = catchAsync(async (req, res) => {
     res.status(200).json({message: "Rider updated"});
 });
 
-export default {addRoute, getRouteDetails, getRouteList, updateRider};
+const updateRoute = catchAsync(async (req, res) => {
+    const {route_id, paths} = req.body;
+    const route = await Route.findByIdAndUpdate(route_id, {paths: paths});
+
+    await Notif.create({
+        message: `Route updated for route ${route_id}`,
+        status_warehouse: "pending",
+        status_rider: "pending",
+    });
+
+    res.status(200).json({message: "Route updated", new_route: route});
+});
+
+export default {addRoute, getRouteDetails, getRouteList, updateRider, updateRoute};

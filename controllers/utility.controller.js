@@ -1,6 +1,7 @@
 import formidable from "formidable";
 import Package from "../models/package.js";
 import Route from "../models/route.js";
+import Notif from "../models/notifs.js";
 import catchAsync from "../utils/catchAsync.js";
 import {calculateErrorfromPackage} from "../utils/utility.js";
 import fs from "fs";
@@ -91,4 +92,17 @@ const downloadGeoJSON = catchAsync(async (req, res) => {
         });
     });
 });
-export {calculateError, uploadDeliveryFiles, downloadGeoJSON};
+
+const Warehouse_status = catchAsync(async (req, res) => {
+    const notifs = await Notif.find({status_warehouse: "pending"}).lean();
+    await Notif.updateMany({status_warehouse: "pending"}, {status_warehouse: "read"});
+    res.status(200).json({message: "Warehouse status", notifs});
+});
+
+const rider_status = catchAsync(async (req, res) => {
+    const notifs = await Notif.find({status_rider: "pending"}).lean();
+    await Notif.updateMany({status_rider: "pending"}, {status_rider: "read"});
+    res.status(200).json({message: "Warehouse status", notifs});
+});
+
+export {calculateError, uploadDeliveryFiles, downloadGeoJSON, Warehouse_status, rider_status};
