@@ -127,7 +127,7 @@ const addDropLocation = async row => {
         };
 
         const pkg = await Package.create({
-            status: "IN WAREHOUSE",
+            latest_status: "IN WAREHOUSE",
             awb_id: faker.datatype.uuid(),
             deliver_to: {name: row[3], phone_number: row[2]},
             sku_id: row[4],
