@@ -11,6 +11,7 @@ class Rabbitmq {
             // make sure that the order channel is created, if not this statement will create it
             await this.channel.assertQueue("grpc");
             await this.channel.assertQueue("dynamic");
+            await this.channel.assertQueue("delete");
         } catch (error) {
             console.log(error);
         }

@@ -114,6 +114,13 @@ const addDynamicPackage = catchAsync(async (req, res) => {
     res.status(200).json({message: "Dynamic point added"});
 });
 
+const deletePackage = catchAsync(async (req, res) => {
+    const {route_id, package_id} = req.body;
+    const channel = rabbit.getChannel();
+    channel.sendToQueue("delete", Buffer.from(JSON.stringify({message: {route_id, package_id}})));
+    res.status(200).json({message: "Package will be deleted in some time"});
+});
+
 export default {
     getCoordinatesFromAddress,
     addDeliveryPackage,
@@ -121,4 +128,5 @@ export default {
     getPackageList,
     uploadImageController,
     addDynamicPackage,
+    deletePackage,
 };
