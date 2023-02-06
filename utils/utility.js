@@ -127,9 +127,9 @@ const addDropLocation = async row => {
 
         const pkg = await Package.create({
             latest_status: "IN WAREHOUSE",
-            awb_id: faker.datatype.uuid(),
-            deliver_to: {name: row[3], phone_number: row[2]},
-            sku_id: row[4],
+            awb_id: row[1],
+            deliver_to: {name: row[2], phone_number: faker.phone.number("+919#########")},
+            sku_id: row[3],
             image_url: "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/clock.jpeg",
             type: "DELIVERY",
             coordinates,
@@ -140,7 +140,7 @@ const addDropLocation = async row => {
                 weight: Math.random() * 20 + 5,
             },
         });
-        console.log(`Row ${row[3]} saved`);
+        console.log(`Row ${row[2]} saved`);
         await redis.addGeoData(redisCoordinates, pkg.id);
         await createStatus("IN WAREHOUSE", pkg._id);
     }

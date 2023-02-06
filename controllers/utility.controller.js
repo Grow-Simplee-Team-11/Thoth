@@ -29,7 +29,7 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
             const readStream = fs.createReadStream(files.csv.filepath);
             let rows = [];
 
-            const csvParserStream = parseStream(readStream, {headers: false})
+            const csvParserStream = parseStream(readStream, {headers: true})
                 .on("error", err => {
                     res.status(500).json({message: "Error in parsing csv file"});
                 })
