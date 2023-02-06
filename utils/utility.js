@@ -104,6 +104,10 @@ const groupPackagesByLocation = packageList => {
     return groupedPackagesByLocation;
 };
 
+function writeDataToFile(data) {
+    fs.appendFileSync("./tmp/dispatch.txt", JSON.stringify(data.status) + " " + JSON.stringify(data.data) + "\n");
+}
+
 const addDropLocation = async row => {
     //google api fails for address startign with #
     // row example: ['addres','area','phone','name','sku_id','','',]
@@ -112,13 +116,16 @@ const addDropLocation = async row => {
         row["address"] = row["address"].slice(1);
     }
 
-    const {data} = await getCoordinatesFromAddress(row["address"]);
+    let data = await getCoordinatesFromAddress(row["address"]);
+
+    writeDataToFile(data);
+    data = data.data;
 
     if (data != undefined && data.results.length > 0) {
         const coordinates = {
             latitude: ~~(data.results[0]?.geometry.location.lat * config.scalingFactor),
             longitude: ~~(data.results[0]?.geometry.location.lng * config.scalingFactor),
-            address: row[0],
+            address: row["address"],
         };
 
         const redisCoordinates = {
