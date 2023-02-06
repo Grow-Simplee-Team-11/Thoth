@@ -109,7 +109,12 @@ const route_stats = catchAsync(async (req, res) => {
     const total_packages = await Package.find({}).countDocuments();
     const delivered = await Package.find({latest_status: "DELIVERED"}).countDocuments();
     const fake_attempted = await Package.find({latest_status: "FAKE ATTEMPT"}).countDocuments();
-    res.status(200).json({message: "Route stats", stats: {total_packages, delivered, fake_attempted}});
+    const route_del_pgk = await Route.find({}, "rider_id delayed_pkgs");
+    res.status(200).json({
+        message: "Route stats",
+        stats: {total_packages, delivered, fake_attempted},
+        rider_stats: route_del_pgk,
+    });
 });
 
 export {calculateError, uploadDeliveryFiles, downloadGeoJSON, Warehouse_status, rider_status, route_stats};

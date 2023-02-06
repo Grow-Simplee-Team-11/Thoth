@@ -12,9 +12,11 @@ const updateStatus = catchAsync(async (req, res) => {
 
     if (status === "DELIVERED" || status === "PICKED") {
         const rider = JSON.parse(await redis.getRiderData(rider_id));
-        const currentTime = moment().valueOf() / 1000;
+        const eddDate = moment.unix(pkg.edd).format("DD-MM-YYYY");
+        const diff = moment().diff(eddDate, "days");
 
-        if (currentTime > pkg.edd) {
+        // currDate > eddDate
+        if (diff >= 1) {
             const route = await Route.findOneAndUpdate(
                 {rider_id: rider._id},
                 {$push: {delayed_pkgs: pkg._id}},
