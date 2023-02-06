@@ -6,6 +6,7 @@ import {setTimeout} from "timers/promises";
 import {faker} from "@faker-js/faker";
 import redis from "../database/redis.js";
 import KNN from "ml-knn";
+import moment from "moment";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -106,12 +107,12 @@ const groupPackagesByLocation = packageList => {
 const addDropLocation = async row => {
     //google api fails for address startign with #
     // row example: ['addres','area','phone','name','sku_id','','',]
-
-    if (row[0].charAt(0) === "#") {
-        row[0] = row[0].slice(1);
+    console.log(row);
+    if (row["address"].charAt(0) === "#") {
+        row["address"] = row["address"].slice(1);
     }
 
-    const {data} = await getCoordinatesFromAddress(row[0]);
+    const {data} = await getCoordinatesFromAddress(row["address"]);
 
     if (data != undefined && data.results.length > 0) {
         const coordinates = {
@@ -125,14 +126,20 @@ const addDropLocation = async row => {
             longitude: data.results[0]?.geometry.location.lng,
         };
 
+        const date = row["EDD"];
+        const date_format = `${date} 09:00:00`;
+        const momint = moment(date_format, "DD-MM-YYYY HH:mm:ss").valueOf();
+        const m = ~~(momint / 1000);
+
         const pkg = await Package.create({
             latest_status: "IN WAREHOUSE",
-            awb_id: row[1],
-            deliver_to: {name: row[2], phone_number: faker.phone.number("+919#########")},
-            sku_id: row[3],
+            awb_id: row["AWB"],
+            deliver_to: {name: row["names"], phone_number: faker.phone.number("+919#########")},
+            sku_id: row["product_id"],
             image_url: "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/clock.jpeg",
             type: "DELIVERY",
             coordinates,
+            edd: m,
             dimensions: {
                 length: Math.random() * 27 + 3,
                 breadth: Math.random() * 27 + 3,
@@ -140,7 +147,7 @@ const addDropLocation = async row => {
                 weight: Math.random() * 20 + 5,
             },
         });
-        console.log(`Row ${row[2]} saved`);
+        console.log(`Row ${row["names"]} saved`);
         await redis.addGeoData(redisCoordinates, pkg.id);
         await createStatus("IN WAREHOUSE", pkg._id);
     }
