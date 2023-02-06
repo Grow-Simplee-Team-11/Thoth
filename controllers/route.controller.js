@@ -74,7 +74,7 @@ const updateRider = catchAsync(async (req, res) => {
 
 const updateRoute = catchAsync(async (req, res) => {
     const {route_id, paths} = req.body;
-    const route = await Route.findByIdAndUpdate(route_id, {paths: paths});
+    const route = await Route.findByIdAndUpdate(route_id, {paths: paths}, {new: true});
 
     await Notif.create({
         message: `Route updated for route ${route_id}`,
