@@ -115,6 +115,7 @@ const addDropLocation = async row => {
     if (row["address"].charAt(0) === "#") {
         row["address"] = row["address"].slice(1);
     }
+    row["address"] = row["address"] + ", Bangalore";
 
     let data = await getCoordinatesFromAddress(row["address"]);
 
