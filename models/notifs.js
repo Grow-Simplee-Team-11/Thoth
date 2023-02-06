@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const notifSchema = new Schema(
     {
         message: {type: String},
+        route_id: {type: String},
         status_warehouse: {type: String},
         status_rider: {type: String},
     },

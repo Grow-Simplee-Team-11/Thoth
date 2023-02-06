@@ -94,15 +94,22 @@ const downloadGeoJSON = catchAsync(async (req, res) => {
 });
 
 const Warehouse_status = catchAsync(async (req, res) => {
-    const notifs = await Notif.find({status_warehouse: "pending"}, {message: 1}).lean();
+    const notifs = await Notif.find({status_warehouse: "pending"}, {message: 1, route_id: 1}).lean();
     await Notif.updateMany({status_warehouse: "pending"}, {status_warehouse: "read"});
     res.status(200).json({message: "Warehouse status", notifs});
 });
 
 const rider_status = catchAsync(async (req, res) => {
-    const notifs = await Notif.find({status_rider: "pending"}, {message: 1}).lean();
+    const notifs = await Notif.find({status_rider: "pending"}, {message: 1, route_id: 1}).lean();
     await Notif.updateMany({status_rider: "pending"}, {status_rider: "read"});
     res.status(200).json({message: "Warehouse status", notifs});
 });
 
-export {calculateError, uploadDeliveryFiles, downloadGeoJSON, Warehouse_status, rider_status};
+const route_stats = catchAsync(async (req, res) => {
+    const total_packages = await Package.find({}).countDocuments();
+    const delivered = await Package.find({latest_status: "DELIVERED"}).countDocuments();
+    const fake_attempted = await Package.find({latest_status: "FAKE ATTEMPT"}).countDocuments();
+    res.status(200).json({message: "Route stats", stats: {total_packages, delivered, fake_attempted}});
+});
+
+export {calculateError, uploadDeliveryFiles, downloadGeoJSON, Warehouse_status, rider_status, route_stats};
