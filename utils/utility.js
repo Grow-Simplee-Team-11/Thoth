@@ -7,7 +7,7 @@ import {faker} from "@faker-js/faker";
 import redis from "../database/redis.js";
 import KNN from "ml-knn";
 import moment from "moment";
-
+import fs from "fs";
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
 };
