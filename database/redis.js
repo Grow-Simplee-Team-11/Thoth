@@ -3,6 +3,7 @@ import redis from "redis";
 const client = redis.createClient({url: config.redis});
 (async () => {
     await client.connect();
+    console.log("Connected to Redis");
 })();
 
 function getHashData(key, id) {
@@ -81,6 +82,28 @@ const getWarehouse = () => {
     return getStringData("warehouse");
 };
 
+const checkScript = () => {
+    return getStringData("script:power");
+};
+
+const setCheckScript = value => {
+    return setStringData("script:power", value);
+};
+const getScriptTime = () => {
+    return getStringData("script:time");
+};
+
+const saveScriptTime = time => {
+    return setStringData("script:time", time);
+};
+
+const getScriptSpeed = () => {
+    return getStringData("script:speed");
+};
+
+const saveScriptSpeed = value => {
+    return setStringData("script:speed", value);
+};
 export default {
     getPickupId,
     setPickupData,
@@ -93,4 +116,10 @@ export default {
     getRiderData,
     getAllRiderData,
     getWarehouse,
+    checkScript,
+    getScriptTime,
+    saveScriptTime,
+    getScriptSpeed,
+    saveScriptSpeed,
+    setCheckScript,
 };

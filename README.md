@@ -160,9 +160,9 @@ POST /rider/add
 {
     "message": "Rider Added",
     "rider": {
-        "name": "Rajiv",
+        "name": "test",
         "phone": "+918987966604",
-        "email": "rajivharlalka009@gmail.com",
+        "email": "test@gmail.com",
         "_id": "63cac2aa1e2adff1a3b062c6",
         "createdAt": "2023-01-20T16:34:50.865Z",
         "updatedAt": "2023-01-20T16:34:50.865Z",

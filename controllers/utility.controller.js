@@ -8,6 +8,7 @@ import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
 import {addDropLocation} from "../utils/utility.js";
 import config from "../config/config.js";
+import redis from "../database/redis.js";
 
 const calculateError = catchAsync(async (req, res) => {
     const {sku_id} = req.query;
@@ -117,4 +118,35 @@ const route_stats = catchAsync(async (req, res) => {
     });
 });
 
-export {calculateError, uploadDeliveryFiles, downloadGeoJSON, Warehouse_status, rider_status, route_stats};
+const startSimutation = catchAsync(async (req, res) => {
+    const {speed} = req.body;
+    await redis.setCheckScript(true);
+    await redis.saveScriptTime(0);
+    await redis.saveScriptSpeed(speed);
+
+    res.status(200).json({message: "Simulation started"});
+});
+
+const stopSimutation = catchAsync(async (req, res) => {
+    await redis.setCheckScript(false);
+    res.status(200).json({message: "Simulation stopped"});
+});
+
+const resumeSimulation = catchAsync(async (req, res) => {
+    const {speed} = req.body;
+    await redis.setCheckScript(true);
+    await redis.saveScriptSpeed(speed);
+    res.status(200).json({message: "Simulation resumed"});
+});
+
+export {
+    calculateError,
+    uploadDeliveryFiles,
+    downloadGeoJSON,
+    Warehouse_status,
+    rider_status,
+    route_stats,
+    startSimutation,
+    stopSimutation,
+    resumeSimulation,
+};
