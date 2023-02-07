@@ -115,8 +115,8 @@ function writeDataToFile(data) {
 const addDropLocation = async row => {
     //google api fails for address startign with #
     // row example: ['addres','area','phone','name','sku_id','','',]
-    const new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]));
-    row = new_row;
+    // const new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]));
+    // row = new_row;
     console.log(row);
     console.log(row);
     if (row["address"].charAt(0) === "#") {
