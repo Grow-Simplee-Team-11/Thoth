@@ -26,6 +26,8 @@ docker compose down --remove-orphans
 
 ## API reference
 
+Postman documentation: [here](https://documenter.getpostman.com/view/19757323/2s8ZDR96HX)
+
 `baseurl`: http://127.0.0.1:3000/v1
 
 `Production Url`: https://thoth.grow-simplee.tech

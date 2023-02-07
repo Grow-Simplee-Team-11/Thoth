@@ -9,6 +9,7 @@ import redis from "../database/redis.js";
 import moment from "moment";
 import fs from "fs";
 import kmeans from "node-kmeans";
+import path from "path";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -212,54 +213,89 @@ const checkError = async (length, breadth, height, weight, sku_id) => {
     else return "ERROR";
 };
 
-const createConfig = (start, waypoints, optimize) => {
+const createConfig = (start, dest, waypoints, optimize) => {
     var waypointConfig = {
         method: "get",
-        url: `https://maps.googleapis.com/maps/api/directions/json?origin=${start}&destination=${start}&waypoints=optimize:${optimize}|${waypoints}&key=${config.googleApiKey}`,
+        url: `https://maps.googleapis.com/maps/api/directions/json?origin=${start}&destination=${dest}&waypoints=optimize:${optimize}|${waypoints}&key=${config.googleApiKey}`,
         headers: {},
     };
     return waypointConfig;
 };
 
-const getRouteWaypoints = async () => {
-    const routeList = await Route.find({}).populate("paths").lean();
-    let routeWaypoints = {};
-    for await (const route of routeList) {
-        let waypoints = "";
-        for await (const path of route.paths) {
-            const latitude = path.coordinates.latitude / parseFloat(config.scalingFactor);
-            const longitude = path.coordinates.longitude / parseFloat(config.scalingFactor);
-            waypoints = waypoints.concat(`${latitude},${longitude}|`);
-        }
-        waypoints = waypoints.slice(0, -1);
-        routeWaypoints[route._id.toString()] = waypoints;
+const getRouteWaypointsId = async route_id => {
+    const route = await Route.findById(route_id).populate("paths").lean();
+    const hub = JSON.parse(await redis.getWarehouse());
+
+    const waypoints = [];
+
+    waypoints.push(
+        `${hub.latitude / parseFloat(config.scalingFactor)},${hub.longitude / parseFloat(config.scalingFactor)}`
+    );
+
+    const pkgList = route.paths;
+    for (const pkg of pkgList) {
+        waypoints.push(
+            `${pkg.coordinates.latitude / parseFloat(config.scalingFactor)},${
+                pkg.coordinates.longitude / parseFloat(config.scalingFactor)
+            }`
+        );
     }
-    return routeWaypoints;
+    waypoints.push(
+        `${hub.latitude / parseFloat(config.scalingFactor)},${hub.longitude / parseFloat(config.scalingFactor)}`
+    );
+    console.log(waypoints);
+    return waypoints;
 };
 
-const getDistanceFromWaypoint = async waypoints => {
-    let hubLocation = JSON.parse(await redis.getWarehouse());
+const format_data = points => {
+    const start = points[0];
+    const end = points[points.length - 1];
 
-    hubLocation.latitude = hubLocation.latitude / parseFloat(config.scalingFactor);
-    hubLocation.longitude = hubLocation.longitude / parseFloat(config.scalingFactor);
+    const waypoints = points.slice(1, points.length - 1);
+    const waypoints_formatted = waypoints.join("|");
 
-    const start = `${hubLocation.latitude},${hubLocation.longitude}`;
-    const optimize = false;
-    const waypointConfig = createConfig(start, waypoints, optimize);
-    console.log(waypointConfig);
+    return {start, end, waypoints: waypoints_formatted};
+};
+
+const getWaypointGrp = waypoints => {
+    let cluster_size = waypoints.length == 26 ? 23 : 25;
+
+    let waypointGrp = [];
+    let small_grp = [];
+    let grp = 0;
+    for (let i = 0; i < waypoints.length; i++) {
+        small_grp.push(waypoints[i]);
+        grp++;
+
+        if (grp == cluster_size) {
+            const format = format_data(small_grp);
+            waypointGrp.push(format);
+            small_grp = [];
+            grp = 0;
+        }
+    }
+
+    const format = format_data(small_grp);
+    waypointGrp.push(format);
+
+    return waypointGrp;
+};
+
+const getDistance = async path => {
+    var waypointConfig = {
+        method: "get",
+        url: `https://maps.googleapis.com/maps/api/directions/json?origin=${path.start}&destination=${path.end}&waypoints=${path.waypoints}&key=${config.googleApiKey}`,
+        headers: {},
+    };
     const response = await axios(waypointConfig);
-    const routes = response.data.routes;
+    console.log(response.data);
+    // fs.writeFile(`./tmp/response-${new Date()}`, JSON.stringify(response.data));
 
     let distance = 0;
-    let time = 0;
-    try {
-        for (const leg of routes[0].legs) {
-            distance += leg.distance.value;
-            time += leg.duration.value;
-        }
-    } catch (err) {
-        console.log(err);
+    for (const leg of response.data.routes[0].legs) {
+        distance += leg.distance.value;
     }
+
     return distance;
 };
 
@@ -272,6 +308,7 @@ export {
     createStatus,
     addDropLocation,
     checkError,
-    getRouteWaypoints,
-    getDistanceFromWaypoint,
+    getRouteWaypointsId,
+    getWaypointGrp,
+    getDistance,
 };
