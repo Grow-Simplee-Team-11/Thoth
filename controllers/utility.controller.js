@@ -82,9 +82,11 @@ const uploadDeliveryExcel = catchAsync(async (req, res) => {
 });
 
 const downloadGeoJSON = catchAsync(async (req, res) => {
+    const hub = JSON.parse(await redis.getWarehouse());
+    console.log(hub);
     const fileLocation = "./tmp/geojson.json";
-    const routeList = await Route.find({}).lean();
-    const geoJSON = {
+    const routeList = await Route.find({}).populate("paths").lean();
+    let geoJSON = {
         type: "FeatureCollection",
         features: [],
     };
@@ -92,8 +94,8 @@ const downloadGeoJSON = catchAsync(async (req, res) => {
     console.log(routeList);
 
     for await (const route of routeList) {
-        const pkgList = await Package.find({_id: {$in: route.paths}}, "coordinates").lean();
-        const featureLine = {
+        const pkgList = route.paths;
+        let featureLine = {
             type: "Feature",
             properties: {},
             geometry: {
@@ -101,12 +103,24 @@ const downloadGeoJSON = catchAsync(async (req, res) => {
                 type: "LineString",
             },
         };
+
+        featureLine.geometry.coordinates.push([
+            hub.longitude / parseFloat(config.scalingFactor),
+            hub.latitude / parseFloat(config.scalingFactor),
+        ]);
+
         for (const pkg of pkgList) {
             featureLine.geometry.coordinates.push([
                 pkg.coordinates.longitude / parseFloat(config.scalingFactor),
                 pkg.coordinates.latitude / parseFloat(config.scalingFactor),
             ]);
         }
+
+        featureLine.geometry.coordinates.push([
+            hub.longitude / parseFloat(config.scalingFactor),
+            hub.latitude / parseFloat(config.scalingFactor),
+        ]);
+
         geoJSON.features.push(featureLine);
     }
 
