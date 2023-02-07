@@ -180,19 +180,7 @@ const route_stats = catchAsync(async (req, res) => {
     const total_packages = await Package.find({}).countDocuments();
     const delivered = await Package.find({latest_status: "DELIVERED"}).countDocuments();
     const fake_attempted = await Package.find({latest_status: "FAKE ATTEMPT"}).countDocuments();
-    let rider_stats = await Route.find({}, "rider_id delayed_pkgs").lean();
-
-    for await (const item of rider_stats) {
-        let stat = {};
-        const waypointId = await getRouteWaypointsId(item._id.toString());
-        const waypointGrp = getWaypointGrp(waypointId);
-
-        let distance = 0;
-        for (let i = 0; i < waypointGrp.length; i++) {
-            distance += await getDistance(waypointGrp[i]);
-        }
-        item.distance = distance;
-    }
+    let rider_stats = await Route.find({}, "-paths").lean();
 
     res.status(200).json({
         message: "Route stats",
