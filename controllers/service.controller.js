@@ -3,7 +3,11 @@ import rabbit from "../utils/rabbitmq.js";
 import {getCoordinatesFromAddress} from "../utils/utility.js";
 
 const startOptimiser = catchAsync(async (req, res) => {
-    const {riders} = req.body;
+    let {riders} = req.query;
+    riders = Number(riders);
+    if (!riders || riders <= 0) {
+        riders = -1;
+    }
     const channel = rabbit.getChannel();
     channel.sendToQueue("grpc", Buffer.from(JSON.stringify({message: "Optimiser", riders})));
     res.status(200).json({message: "Optimiser Started"});
