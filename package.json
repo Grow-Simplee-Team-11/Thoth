@@ -27,6 +27,7 @@
         "node-kmeans": "^1.1.9",
         "nodemon": "^2.0.20",
         "redis": "^4.5.1",
+        "wink-lemmatizer": "^3.0.2",
         "winston": "^3.8.2",
         "xlsx": "^0.18.5",
         "xss-clean": "^0.1.1"

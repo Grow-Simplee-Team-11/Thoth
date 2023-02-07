@@ -41,10 +41,39 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
                     readStream.close();
                 })
                 .on("end", async () => {
+                    // send the row in groups of 4 to the addDropLocation function
+
+                    let index = 0;
+                    let grp = [];
+                    let waiting_request = [];
+
                     for await (const row of rows) {
-                        console.log(new Date());
-                        await addDropLocation(row);
+                        grp.push(row);
+                        index++;
+
+                        if (index === 20) {
+                            console.log(new Date());
+                            for (const row of grp) {
+                                waiting_request.push(addDropLocation(row));
+                            }
+                            await Promise.all(waiting_request);
+                            grp = [];
+                            index = 0;
+                            waiting_request = [];
+                        }
+                        // console.log(new Date());
+                        // await addDropLocation(row);
                     }
+
+                    console.log(new Date());
+                    for (const row of grp) {
+                        waiting_request.push(addDropLocation(row));
+                    }
+                    await Promise.all(waiting_request);
+                    grp = [];
+                    index = 0;
+                    waiting_request = [];
+
                     res.status(200).json({message: "Packages created"});
                 });
             return;

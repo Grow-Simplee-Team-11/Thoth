@@ -10,6 +10,7 @@ import moment from "moment";
 import fs from "fs";
 import kmeans from "node-kmeans";
 import path from "path";
+import lemmatize from "wink-lemmatizer";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -115,16 +116,26 @@ function writeDataToFile(data) {
 const addDropLocation = async row => {
     //google api fails for address startign with #
     // row example: ['addres','area','phone','name','sku_id','','',]
-    // const new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]));
+    let new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]));
+    row = new_row;
+    new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [lemmatize.noun(k), v]));
+    row = new_row;
+    console.log(new_row);
+    const headers = {
+        address: "address",
+        edd: "edd",
+        name: "name",
+        awb: "awb",
+        sku_id: "product_id",
+    };
     // row = new_row;
-    console.log(row);
-    console.log(row);
-    if (row["address"].charAt(0) === "#") {
-        row["address"] = row["address"].slice(1);
-    }
-    row["address"] = row["address"] + ", Bangalore";
 
-    let data = await getCoordinatesFromAddress(row["address"]);
+    if (row[headers.address].charAt(0) === "#") {
+        row[headers.address] = row[headers.address].slice(1);
+    }
+    row[headers.address] = row[headers.address] + ", Bangalore";
+
+    let data = await getCoordinatesFromAddress(row[headers.address]);
 
     writeDataToFile(data);
     data = data.data;
@@ -133,7 +144,7 @@ const addDropLocation = async row => {
         const coordinates = {
             latitude: ~~(data.results[0]?.geometry.location.lat * config.scalingFactor),
             longitude: ~~(data.results[0]?.geometry.location.lng * config.scalingFactor),
-            address: row["address"],
+            address: row[headers.address],
         };
 
         const redisCoordinates = {
@@ -141,7 +152,7 @@ const addDropLocation = async row => {
             longitude: data.results[0]?.geometry.location.lng,
         };
 
-        const date = row["edd"];
+        const date = row[headers.edd];
         const date_format = `${date} 09:00:00`;
         const momint = moment(date_format, "DD-MM-YYYY HH:mm:ss").valueOf();
         const m = ~~(momint / 1000);
@@ -159,9 +170,9 @@ const addDropLocation = async row => {
 
         const pkg = await Package.create({
             latest_status: "IN WAREHOUSE",
-            awb_id: row["AWB"],
-            deliver_to: {name: row["names"], phone_number: faker.phone.number("+919#########")},
-            sku_id: row["product_id"],
+            awb_id: row[headers.awb],
+            deliver_to: {name: row[headers.name], phone_number: faker.phone.number("+919#########")},
+            sku_id: row[headers.sku_id],
             image_url: images_list[Math.floor(Math.random() * images_list.length)],
             type: "DELIVERY",
             coordinates,
@@ -173,7 +184,7 @@ const addDropLocation = async row => {
                 weight: Math.random() * 20 + 5,
             },
         });
-        console.log(`Row ${row["names"]} saved`);
+        console.log(`Row ${row[headers.name]} saved`);
         await redis.addGeoData(redisCoordinates, pkg.id);
         await createStatus("IN WAREHOUSE", pkg._id);
     }
