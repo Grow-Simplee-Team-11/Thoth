@@ -141,12 +141,23 @@ const addDropLocation = async row => {
         const momint = moment(date_format, "DD-MM-YYYY HH:mm:ss").valueOf();
         const m = ~~(momint / 1000);
 
+        const images_list = [
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/clock.jpeg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/61Dw5Z8LzJL._SL1000_.jpg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/71i2XhHU3pL._SX466_.jpg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/download+(1).jpeg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/download+(2).jpeg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/download.jpeg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/pexels-math-90946+(1).jpg",
+            "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/vwm915647-final-copy.jpg",
+        ];
+
         const pkg = await Package.create({
             latest_status: "IN WAREHOUSE",
             awb_id: row["AWB"],
             deliver_to: {name: row["names"], phone_number: faker.phone.number("+919#########")},
             sku_id: row["product_id"],
-            image_url: "https://public-images-inter-iit.s3.ap-south-1.amazonaws.com/clock.jpeg",
+            image_url: images_list[Math.floor(Math.random() * images_list.length)],
             type: "DELIVERY",
             coordinates,
             edd: m,
