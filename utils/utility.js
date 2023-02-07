@@ -21,22 +21,23 @@ Number.prototype.toRad = function () {
 };
 
 const haversineDistance = (riderCoordinates, pkgCoordinates) => {
-    const lat1 = riderCoordinates.latitude / config.scalingFactor;
-    const lon1 = riderCoordinates.longitude / config.scalingFactor;
+    const lat1 = riderCoordinates.latitude / parseFloat(config.scalingFactor);
+    const lon1 = riderCoordinates.longitude / parseFloat(config.scalingFactor);
 
-    const lat2 = pkgCoordinates.latitude / config.scalingFactor;
-    const lon2 = pkgCoordinates.longitude / config.scalingFactor;
+    const lat2 = pkgCoordinates.latitude / parseFloat(config.scalingFactor);
+    const lon2 = pkgCoordinates.longitude / parseFloat(config.scalingFactor);
 
-    const R = 6371;
-    var x1 = lat2 - lat1;
-    var dLat = x1.toRad();
-    var x2 = lon2 - lon1;
-    var dLon = x2.toRad();
-    var a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+    const R = 6371e3; // metres
+    const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const d = R * c; // in metres
+    return d / parseFloat(1000);
 };
 
 const getCoordinatesFromAddress = async address => {
