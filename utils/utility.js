@@ -2,12 +2,14 @@ import axios from "axios";
 import config from "../config/config.js";
 import Status from "../models/status.js";
 import Package from "../models/package.js";
+import Route from "../models/route.js";
 import {setTimeout} from "timers/promises";
 import {faker} from "@faker-js/faker";
 import redis from "../database/redis.js";
 import KNN from "ml-knn";
 import moment from "moment";
 import fs from "fs";
+
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
 };
@@ -187,6 +189,57 @@ const checkError = async (length, breadth, height, weight, sku_id) => {
     return result[0] === 1 ? "Erroneous" : "Not Errorneous";
 };
 
+const createConfig = (start, waypoints, optimize) => {
+    var waypointConfig = {
+        method: "get",
+        url: `https://maps.googleapis.com/maps/api/directions/json?origin=${start}&destination=${start}&waypoints=optimize:${optimize}|${waypoints}&key=${config.googleApiKey}`,
+        headers: {},
+    };
+    return waypointConfig;
+};
+
+const getRouteWaypoints = async () => {
+    const routeList = await Route.find({}).populate("paths").lean();
+    let routeWaypoints = {};
+    for await (const route of routeList) {
+        let waypoints = "";
+        for await (const path of route.paths) {
+            const latitude = path.coordinates.latitude / parseFloat(config.scalingFactor);
+            const longitude = path.coordinates.longitude / parseFloat(config.scalingFactor);
+            waypoints = waypoints.concat(`${latitude},${longitude}|`);
+        }
+        waypoints = waypoints.slice(0, -1);
+        routeWaypoints[route._id.toString()] = waypoints;
+    }
+    return routeWaypoints;
+};
+
+const getDistanceFromWaypoint = async waypoints => {
+    let hubLocation = JSON.parse(await redis.getWarehouse());
+
+    hubLocation.latitude = hubLocation.latitude / parseFloat(config.scalingFactor);
+    hubLocation.longitude = hubLocation.longitude / parseFloat(config.scalingFactor);
+
+    const start = `${hubLocation.latitude},${hubLocation.longitude}`;
+    const optimize = false;
+    const waypointConfig = createConfig(start, waypoints, optimize);
+    console.log(waypointConfig);
+    const response = await axios(waypointConfig);
+    const routes = response.data.routes;
+
+    let distance = 0;
+    let time = 0;
+    try {
+        for (const leg of routes[0].legs) {
+            distance += leg.distance.value;
+            time += leg.duration.value;
+        }
+    } catch (err) {
+        console.log(err);
+    }
+    return distance;
+};
+
 export {
     RandomRange,
     getCoordinatesFromAddress,
@@ -196,4 +249,6 @@ export {
     createStatus,
     addDropLocation,
     checkError,
+    getRouteWaypoints,
+    getDistanceFromWaypoint,
 };

@@ -7,7 +7,7 @@ import {calculateErrorfromPackage} from "../utils/utility.js";
 import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
 import xlsx from "xlsx";
-import {addDropLocation} from "../utils/utility.js";
+import {addDropLocation, getRouteWaypoints, getDistanceFromWaypoint} from "../utils/utility.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
 
@@ -137,11 +137,21 @@ const route_stats = catchAsync(async (req, res) => {
     const total_packages = await Package.find({}).countDocuments();
     const delivered = await Package.find({latest_status: "DELIVERED"}).countDocuments();
     const fake_attempted = await Package.find({latest_status: "FAKE ATTEMPT"}).countDocuments();
-    const route_del_pgk = await Route.find({}, "rider_id delayed_pkgs");
+    let rider_stats = await Route.find({}, "rider_id delayed_pkgs").lean();
+    const waypoints = await getRouteWaypoints();
+
+    rider_stats = await Promise.all(
+        rider_stats.map(async item => {
+            const distance = await getDistanceFromWaypoint(waypoints[item._id.toString()]);
+            item.distance = distance;
+            return item;
+        })
+    );
+
     res.status(200).json({
         message: "Route stats",
         stats: {total_packages, delivered, fake_attempted},
-        rider_stats: route_del_pgk,
+        rider_stats: rider_stats,
     });
 });
 

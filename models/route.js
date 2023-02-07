@@ -7,6 +7,7 @@ const routeSchema = new Schema(
         paths: [{type: Schema.Types.ObjectId, ref: "Package"}],
         bin_id: {type: Schema.Types.ObjectId, ref: "Bin", index: true},
         delayed_pkgs: [{type: Schema.Types.ObjectId, ref: "Package"}],
+        distance: {type: Number, default: 0},
     },
     {timestamps: true}
 );
