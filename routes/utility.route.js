@@ -2,6 +2,7 @@ import express from "express";
 import {
     calculateError,
     uploadDeliveryFiles,
+    uploadDeliveryExcel,
     downloadGeoJSON,
     Warehouse_status,
     rider_status,
@@ -15,6 +16,7 @@ const router = express.Router();
 
 router.get("/error", calculateError);
 router.post("/csv/package", uploadDeliveryFiles);
+router.post("/xlsx/package", uploadDeliveryExcel);
 router.get("/geojson/download", downloadGeoJSON);
 router.get("/notif/warehouse", Warehouse_status);
 router.get("/notif/rider", rider_status);

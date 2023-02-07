@@ -6,6 +6,7 @@ import catchAsync from "../utils/catchAsync.js";
 import {calculateErrorfromPackage} from "../utils/utility.js";
 import fs from "fs";
 import {parseStream} from "@fast-csv/parse";
+import xlsx from "xlsx";
 import {addDropLocation} from "../utils/utility.js";
 import config from "../config/config.js";
 import redis from "../database/redis.js";
@@ -50,6 +51,32 @@ const uploadDeliveryFiles = catchAsync(async (req, res) => {
         } catch (err) {
             console.log(err);
             res.status(500).json({message: "Error in parsing csv file"});
+        }
+    });
+});
+
+const uploadDeliveryExcel = catchAsync(async (req, res) => {
+    const form = new formidable.IncomingForm();
+    form.multiples = true;
+    form.parse(req, async function (error, fields, files) {
+        try {
+            if (!files || !files.xlsx) {
+                res.status(500).json({message: "File not sent"});
+            }
+
+            const xlsxParserStream = xlsx.readFile(files.xlsx.filepath);
+            const x = xlsxParserStream.Sheets[xlsxParserStream.SheetNames[0]];
+            const rows = xlsx.utils.sheet_to_json(x);
+
+            for await (const row of rows) {
+                console.log(new Date());
+                await addDropLocation(row);
+            }
+            res.status(200).json({message: "Packages created"});
+            return;
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: "Error in parsing xlsx file"});
         }
     });
 });
@@ -142,6 +169,7 @@ const resumeSimulation = catchAsync(async (req, res) => {
 export {
     calculateError,
     uploadDeliveryFiles,
+    uploadDeliveryExcel,
     downloadGeoJSON,
     Warehouse_status,
     rider_status,
