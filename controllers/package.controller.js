@@ -67,7 +67,12 @@ const getPackageList = catchAsync(async (req, res) => {
 });
 
 const uploadImageController = catchAsync(async (req, res) => {
-    const {awb_id} = req.query;
+    let {awb_id} = req.query;
+    if (awb_id == undefined) {
+        //fetch a random Package
+        const pkg = await Package.findOne({type: "RIDER ASSIGNED"});
+        awb_id = pkg.awb_id;
+    }
     const {length, breadth, height, weight, sku_id} = req.body;
     const error = await checkError(length, breadth, height, weight, sku_id);
     if (error == "false") console.log("Less Packages");

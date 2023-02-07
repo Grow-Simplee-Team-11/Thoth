@@ -115,6 +115,9 @@ function writeDataToFile(data) {
 const addDropLocation = async row => {
     //google api fails for address startign with #
     // row example: ['addres','area','phone','name','sku_id','','',]
+    const new_row = Object.fromEntries(Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]));
+    row = new_row;
+    console.log(row);
     console.log(row);
     if (row["address"].charAt(0) === "#") {
         row["address"] = row["address"].slice(1);
@@ -138,7 +141,7 @@ const addDropLocation = async row => {
             longitude: data.results[0]?.geometry.location.lng,
         };
 
-        const date = row["EDD"];
+        const date = row["edd"];
         const date_format = `${date} 09:00:00`;
         const momint = moment(date_format, "DD-MM-YYYY HH:mm:ss").valueOf();
         const m = ~~(momint / 1000);
