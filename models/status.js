@@ -7,6 +7,7 @@ const statusSchema = new Schema(
             type: String,
             enum: [
                 "IN WAREHOUSE",
+                "ERRONEUS",
                 "SCANNING",
                 "FORMING CLUSTER",
                 "RIDER ASSIGNED",

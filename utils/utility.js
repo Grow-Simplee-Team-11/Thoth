@@ -6,9 +6,9 @@ import Route from "../models/route.js";
 import {setTimeout} from "timers/promises";
 import {faker} from "@faker-js/faker";
 import redis from "../database/redis.js";
-import KNN from "ml-knn";
 import moment from "moment";
 import fs from "fs";
+import kmeans from "node-kmeans";
 
 const RandomRange = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -174,19 +174,30 @@ const checkError = async (length, breadth, height, weight, sku_id) => {
     for (const pkg of packages) {
         array.push([pkg.dimensions.length, pkg.dimensions.breadth, pkg.dimensions.height, pkg.dimensions.weight]);
     }
+    let new_data;
+    let old_data = kmeans.clusterize(array, {k: 2}, (err, res) => {
+        if (err) console.error(err);
+        else return res;
+    });
 
-    const train = [];
-    for (let i = 0; i < array.length - 1; i++) {
-        train.push(0);
-    }
-    train.push(1);
-    console.log(array, train);
-    let knn = new KNN(array, train, {k: 3});
+    console.log("old_data:", old_data.groups);
 
-    const test_dataset = [[Number(length), Number(breadth), Number(height), Number(weight)]];
-    console.log(test_dataset);
-    let result = knn.predict(test_dataset);
-    return result[0] === 1 ? "Erroneous" : "Not Errorneous";
+    array.push([length, breadth, height, weight]);
+    new_data = kmeans.clusterize(array, {k: 2}, (err, res) => {
+        if (err) console.error(err);
+        else {
+            return res;
+        }
+    });
+    console.log("new_data", new_data.groups);
+
+    const old_large_cluster = old_data.groups[0].clusterInd,
+        old_small_cluster = old_data.groups[1].clusterInd;
+    const new_large_cluster = new_data.groups[0].clusterInd,
+        new_small_cluster = old_data.groups[1].clusterInd;
+
+    if (old_large_cluster < new_large_cluster) return "NON_ERROR";
+    else return "ERROR";
 };
 
 const createConfig = (start, waypoints, optimize) => {

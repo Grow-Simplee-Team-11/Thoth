@@ -71,7 +71,16 @@ const uploadImageController = catchAsync(async (req, res) => {
     const {length, breadth, height, weight, sku_id} = req.body;
     const error = await checkError(length, breadth, height, weight, sku_id);
     if (error == "false") console.log("Less Packages");
-    else console.log(error);
+    else {
+        console.log(error);
+        if (error == "ERROR") {
+            const pkg = await Package.find({awb_id}).lean();
+            console.log(pkg);
+            await Status.create({package_id: pkg._id, status: "ERRONEUS"});
+            await Package.findOneAndUpdate({awb_id}, {latest_status: "ERRONEUS"});
+        }
+    }
+
     const fileName = req.file.location;
     const pkg = await Package.findOneAndUpdate(
         {awb_id},

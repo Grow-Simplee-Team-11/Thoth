@@ -2238,18 +2238,6 @@ mkdirp@^0.5.4:
   dependencies:
     minimist "^1.2.6"
 
-ml-distance-euclidean@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ml-distance-euclidean/-/ml-distance-euclidean-2.0.0.tgz#3a668d236649d1b8fec96380b9435c6f42c9a817"
-  integrity sha512-yC9/2o8QF0A3m/0IXqCTXCzz2pNEzvmcE/9HFKOZGnTjatvBbsn4lWYJkxENkA4Ug2fnYl7PXQxnPi21sgMy/Q==
-
-ml-knn@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ml-knn/-/ml-knn-3.0.0.tgz#98eb350919f15d4a719312cfdcf7b62693201ad5"
-  integrity sha512-w7Jig4vW09OYMurlIRRJj8yL2O/835QJpxup+yW7QVYXSjixmanPtPQL+weiTYbaB/wWX8JilB+Wllk4mxvP5w==
-  dependencies:
-    ml-distance-euclidean "^2.0.0"
-
 moment@^2.29.4:
   version "2.29.4"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
@@ -2370,6 +2358,13 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
+node-kmeans@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/node-kmeans/-/node-kmeans-1.1.9.tgz#ca445d46302f5e76d33f8dfefa895d61f7956ced"
+  integrity sha512-qZiuD4ab4cvsSWQSccWzLb4j1cHlm6wjGiWrbhCPZweVzpfcWBQ2CMqK4YBtJJ3OhK27NkZ1PKiLlZ52Z///cQ==
+  dependencies:
+    underscore "^1.9.1"
 
 nodemon@^2.0.20:
   version "2.0.20"
@@ -2998,6 +2993,11 @@ undefsafe@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/undefsafe/-/undefsafe-2.0.5.tgz#38733b9327bdcd226db889fb723a6efd162e6e2c"
   integrity sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==
+
+underscore@^1.9.1:
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.6.tgz#04786a1f589dc6c09f761fc5f45b89e935136441"
+  integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
