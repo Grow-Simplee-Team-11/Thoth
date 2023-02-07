@@ -96,11 +96,36 @@ const uploadDeliveryExcel = catchAsync(async (req, res) => {
             const xlsxParserStream = xlsx.readFile(files.xlsx.filepath);
             const x = xlsxParserStream.Sheets[xlsxParserStream.SheetNames[0]];
             const rows = xlsx.utils.sheet_to_json(x);
-
+            let index = 0;
+            let grp = [];
+            let waiting_request = [];
             for await (const row of rows) {
-                console.log(new Date());
-                await addDropLocation(row);
+                grp.push(row);
+                index++;
+
+                if (index === 20) {
+                    console.log(new Date());
+                    for (const row of grp) {
+                        waiting_request.push(addDropLocation(row));
+                    }
+                    await Promise.all(waiting_request);
+                    grp = [];
+                    index = 0;
+                    waiting_request = [];
+                }
+                // console.log(new Date());
+                // await addDropLocation(row);
             }
+
+            console.log(new Date());
+            for (const row of grp) {
+                waiting_request.push(addDropLocation(row));
+            }
+            await Promise.all(waiting_request);
+            grp = [];
+            index = 0;
+            waiting_request = [];
+
             res.status(200).json({message: "Packages created"});
             return;
         } catch (err) {
