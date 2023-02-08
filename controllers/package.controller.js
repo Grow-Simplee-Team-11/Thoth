@@ -73,7 +73,9 @@ const uploadImageController = catchAsync(async (req, res) => {
         const pkg = await Package.findOne({type: "RIDER ASSIGNED"});
         awb_id = pkg.awb_id;
     }
-    const {length, breadth, height, weight, sku_id} = req.body;
+    const {length, breadth, height, weight} = req.body;
+    const pkgF = await Package.findOne({awb_id: awb_id});
+    const sku_id = pkgF.sku_id;
     const error = await checkError(length, breadth, height, weight, sku_id);
     if (error == "false") console.log("Less Packages");
     else {
